@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+<div class="main-container">
+<div class="events">
+<div th:each="event : ${events}">
+    <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date}"></p>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
