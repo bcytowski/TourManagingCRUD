@@ -21,7 +21,7 @@ public class Event {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Bands_Events",
             joinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") },

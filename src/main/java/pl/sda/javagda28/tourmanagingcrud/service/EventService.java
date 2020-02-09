@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,6 +26,10 @@ public class EventService {
     private final EventRepository eventRepository;
     private final VenueRepository venueRepository;
     private final BandRepository bandRepository;
+
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
 
     public Event createEvent(final EventForm eventForm) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -38,7 +43,35 @@ public class EventService {
         return eventRepository.saveAndFlush(event);
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public void removeEvent(final Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
+
+    public void updateEvent(final Long id, final EventForm eventForm) {
+        Optional<Event> event = eventRepository.findById(id);
+        Event e = event.get();
+        e.setName(eventForm.getName());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
+        LocalTime localTime = LocalTime.of(20, 0);
+        LocalDateTime localDateTime = LocalDateTime.of(eventDate, localTime);
+        e.setDate(localDateTime);
+        e.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
+        e.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
+        eventRepository.save(e);
+    }
+
+    public EventForm createEventFormById (final Long id){
+        Event event = eventRepository.findById(id).get();
+
+        EventForm eventForm = new EventForm();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        List<Long> bandIds = event.getBands().stream()
+                .map(band -> band.getId())
+                .collect(Collectors.toList());
+
+        return eventForm.builder().name(event.getName()).date(event.getDate().format(formatter))
+                .venueId(event.getVenue().getId()).bandIds(bandIds).build();
     }
 }
