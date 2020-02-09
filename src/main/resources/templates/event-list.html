@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+<div class="main-container">
+    <div class="events">
+        <div th:each="event : ${events}">
+            <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date} + ' on a ' + ${event.getVenue().getName()}"></p>
+            <p th:text="'Bands playing on this event are '"></p>
+            <span th:each="band: ${event.getBands()}" th:text="${band.getName()} + ' ' "></span>
+
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

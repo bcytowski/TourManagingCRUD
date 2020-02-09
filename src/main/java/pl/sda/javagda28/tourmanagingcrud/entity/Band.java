@@ -22,12 +22,13 @@ public class Band {
     @Column(name = "members")
     private Long members;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "Bands_Events",
-            joinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") }
-    )
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "Bands_Events",
+//            joinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") },
+//            inverseJoinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") }
+//    )
+    @ManyToMany(mappedBy = "bands")
     private List<Event> events;
 
 }

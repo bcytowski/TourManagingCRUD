@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 
 @Repository
-public interface EventRepository extends JpaRepository <Event, String>{
+public interface EventRepository extends JpaRepository <Event, Long>{
 }

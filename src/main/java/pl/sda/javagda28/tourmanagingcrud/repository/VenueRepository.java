@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
 
 @Repository
-public interface VenueRepository extends JpaRepository<Venue, String> {
+public interface VenueRepository extends JpaRepository<Venue, Long> {
 }

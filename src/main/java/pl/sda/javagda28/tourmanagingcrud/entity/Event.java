@@ -21,7 +21,12 @@ public class Event {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Bands_Events",
+            joinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") }
+    )
     private List<Band> bands;
 
     @ManyToOne

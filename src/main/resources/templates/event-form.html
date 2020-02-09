@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event form</title>
+</head>
+<body>
+<div class="event-form">
+    <form method="post" th:object="${event}" th:action="@{/events/add}">
+        <label for="name">Event name</label>
+        <input id="name" th:field="*{name}"/>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" th:field="*{date}"/>
+
+        Venue: <select th:field="*{venueId}">
+        <option value=""> --</option>
+        <option th:each="venue : ${venues}"
+                th:value="${venue.getId()}"
+                th:utext="${venue.getName()}"></option>
+    </select>
+
+        <label for="bands">Bands</label>
+        <select id="bands" th:field="*{bandIds}" multiple="multiple">
+            <option th:each="band: ${bands}"
+                    th:value="${band.getId()}" th:text="${band.getName()}">
+        </select>
+
+
+        <button type="submit">Create Event</button>
+    </form>
+
+</div>
+</body>
+</html>
