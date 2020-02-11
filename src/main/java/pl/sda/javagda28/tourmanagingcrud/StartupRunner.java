@@ -5,16 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.tomcat.jni.Local;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.sda.javagda28.tourmanagingcrud.entity.Band;
-import pl.sda.javagda28.tourmanagingcrud.entity.Event;
-import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
-import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
-import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
+import pl.sda.javagda28.tourmanagingcrud.entity.*;
+import pl.sda.javagda28.tourmanagingcrud.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +21,9 @@ public class StartupRunner implements CommandLineRunner {
     private final VenueRepository venueRepository;
     private final BandRepository bandRepository;
     private final EventRepository eventRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Override
     public void run(final String... args) throws Exception {
@@ -38,5 +39,12 @@ public class StartupRunner implements CommandLineRunner {
         eventRepository.save(new Event(null,"Dożynki", LocalDateTime.now(), Arrays.asList(metallica), stadion));
         eventRepository.save(new Event(null,"Kortowiada", LocalDateTime.now(),Arrays.asList(metallica, slayer), stadion));
 
+        final Role role = new Role("ROLE_ADMIN");
+        roleRepository.save(role);
+
+        final User user = new User("admin", "admin@admins.com",
+                passwordEncoder.encode("admin"), List.of(),
+                List.of(role));
+        userRepository.save(user);
     }
 }

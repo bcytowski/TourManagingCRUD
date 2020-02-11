@@ -1,6 +1,7 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class EventController {
 
         return "event-list";
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/add")
     public String viewEventForm(final ModelMap modelMap) {
         List<Event> events = eventService.getAllEvents();
@@ -46,19 +47,19 @@ public class EventController {
 
         return "event-form";
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/add")
     public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, final ModelMap modelMap) {
         eventService.createEvent(eventForm);
         return displayEvents(modelMap);
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/remove/{id}")
     public String removeEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
         eventService.removeEvent(id);
         return displayEvents(modelMap);
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/edit/{id}")
     public String getEventEditForm(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
         List<Venue> venues = venueService.getAllVenues();
@@ -70,7 +71,7 @@ public class EventController {
 
         return "event-form";
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/edit/{id}")
     public String editEvent(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
         eventService.updateEvent(id, eventForm);
