@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
 import pl.sda.javagda28.tourmanagingcrud.model.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
@@ -18,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Service
 @Transactional
@@ -50,7 +53,7 @@ public class EventService {
     public void updateEvent(final Long id, final EventForm eventForm) {
         Event event = eventRepository.findById(id)
                 .map(e -> copyValuesFromFormToEvent(eventForm, e))
-                .orElseThrow(() -> new IllegalArgumentException("jebac sad"));
+                .orElseThrow(() -> new IllegalArgumentException(" "));
 
         eventRepository.save(event);
     }
@@ -72,10 +75,13 @@ public class EventService {
     }
 
     public EventForm createEventFormById (final Long id){
-        Event event = eventRepository.findById(id).get();
+        final Event event = eventRepository.findById(id)
+                .orElseThrow(()-> new TourManagingException("couldn't find specific event"));
+
 
         EventForm eventForm = new EventForm();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
         List<Long> bandIds = event.getBands().stream()
                 .map(band -> band.getId())

@@ -61,7 +61,7 @@ public class EventController {
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/edit/{id}")
-    public String getEventEditForm(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
+    public String getEventEditForm(@PathVariable("id") final Long id, final ModelMap modelMap) {
         List<Venue> venues = venueService.getAllVenues();
         List<Band> bands = bandService.getAllBands();
         modelMap.addAttribute("venues", venues);

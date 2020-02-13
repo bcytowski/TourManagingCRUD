@@ -8,7 +8,7 @@ import pl.sda.javagda28.tourmanagingcrud.entity.User;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Long countAllByUsernameOrEmail(@NonNull String username, @NonNull String email);
 
     @Query("SELECT u FROM users u left join fetch u.roles WHERE u.username = :username")
