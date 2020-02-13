@@ -2,10 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>index</title>
+    <title>USER FORM</title>
 </head>
 <body>
-<strong>WELCOME TO TOUR MANAGING CRUD</strong>
-<a th:href="@{/logout}">Logout</a>
+<div class="user-form">
+    <form action="post" th:action="@{/user}" th:object="${user}">
+
+    </form>
+</div>
 </body>
 </html>

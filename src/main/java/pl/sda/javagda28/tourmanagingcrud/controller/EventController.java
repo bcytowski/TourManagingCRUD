@@ -25,7 +25,7 @@ public class EventController {
     private final VenueService venueService;
     private final BandService bandService;
 
-    @GetMapping("/")
+    @GetMapping
     public String displayEvents(final ModelMap modelMap) {
         List<Event> events = eventService.getAllEvents();
 

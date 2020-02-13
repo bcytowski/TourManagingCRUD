@@ -39,12 +39,26 @@ public class StartupRunner implements CommandLineRunner {
         eventRepository.save(new Event(null,"Dożynki", LocalDateTime.now(), Arrays.asList(metallica), stadion));
         eventRepository.save(new Event(null,"Kortowiada", LocalDateTime.now(),Arrays.asList(metallica, slayer), stadion));
 
-        final Role role = new Role("ROLE_ADMIN");
-        roleRepository.save(role);
+        final Role roleAdmin = new Role("ROLE_ADMIN");
+        roleRepository.save(roleAdmin);
 
-        final User user = new User("admin", "admin@admins.com",
+        final Role roleBand = new Role("ROLE_BAND");
+        roleRepository.save(roleBand);
+
+        final Role roleOrganiser = new Role("ROLE_ORGANISER");
+        roleRepository.save(roleOrganiser);
+
+        final User user = new User(null,"admin", "admin@admins.com",
                 passwordEncoder.encode("admin"), List.of(),
-                List.of(role));
+                List.of(roleAdmin));
         userRepository.save(user);
+
+        final User bandUser = new User(null,"band", "band@band.com",
+                passwordEncoder.encode("band"),List.of(), List.of(roleBand));
+        userRepository.save(bandUser);
+
+        final User organiserUser = new User(null, "organiser", "organiser@organiser.com",
+                passwordEncoder.encode("organiser"), List.of(), List.of(roleOrganiser));
+        userRepository.save(organiserUser);
     }
 }

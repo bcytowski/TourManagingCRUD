@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+<table style="border: 1px solid #000; width: 100%">
+    <tr>
+        <th>Lp.</th>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Roles</th>
+
+        <th></th><!--edit-->
+        <th></th><!--remove-->
+    </tr>
+    <tr th:each="us,loop : ${users}">
+        <td th:text="${loop.index}"></td>
+        <td th:text="${us.getId()}"></td>
+        <td th:text="${us.getUsername()}"></td>
+        <td th:text="${us.getEmail()}"></td>
+        <td th:each="role: ${us.getRoles()}" th:text="${role.getName()} + ' ' "></td>
+
+
+    </tr>
+</table>
+
+</body>
+</html>

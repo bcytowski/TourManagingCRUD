@@ -48,17 +48,27 @@ public class EventService {
     }
 
     public void updateEvent(final Long id, final EventForm eventForm) {
-        Optional<Event> event = eventRepository.findById(id);
-        Event e = event.get();
-        e.setName(eventForm.getName());
+        Event event = eventRepository.findById(id)
+                .map(e -> copyValuesFromFormToEvent(eventForm, e))
+                .orElseThrow(() -> new IllegalArgumentException("jebac sad"));
+
+        eventRepository.save(event);
+    }
+
+    private Event copyValuesFromFormToEvent(EventForm eventForm, Event eventFromDb) {
+        eventFromDb.setName(eventForm.getName());
+        eventFromDb.setDate(getStartDateTime(eventForm));
+        eventFromDb.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
+        eventFromDb.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
+
+        return eventFromDb;
+    }
+
+    private LocalDateTime getStartDateTime(EventForm eventForm) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
         LocalTime localTime = LocalTime.of(20, 0);
-        LocalDateTime localDateTime = LocalDateTime.of(eventDate, localTime);
-        e.setDate(localDateTime);
-        e.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
-        e.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
-        eventRepository.save(e);
+        return LocalDateTime.of(eventDate, localTime);
     }
 
     public EventForm createEventFormById (final Long id){

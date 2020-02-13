@@ -15,6 +15,10 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "username")
     private String username;
 
     @Column(name = "email")
@@ -28,7 +32,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "user_to_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "username"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "name"))
     private List<Role> roles;
 }

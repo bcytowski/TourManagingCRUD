@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Events</title>
@@ -12,13 +12,18 @@
             <p th:text="'Bands playing on this event are '"></p>
             <span th:each="band: ${event.getBands()}" th:text="${band.getName()} + ' ' "></span>
 
-            <form method="post" th:action="@{/events/remove/__${event.getId()}__}">
-                <button type="submit">Remove</button>
-            </form>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <form method="post"
+                      th:action="@{/events/remove/__${event.getId()}__}">
+                    <button type="submit">Remove</button>
+                </form>
+            </div>
 
-            <form method="get" th:action="@{/events/edit/__${event.getId()}__}">
-                <button type="submit">Edit</button>
-            </form>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <form method="post" th:action="@{/events/edit/__${event.getId()}__}">
+                    <button type="submit">Edit</button>
+                </form>
+            </div>
 
         </div>
 
