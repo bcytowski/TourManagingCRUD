@@ -20,7 +20,7 @@
             </div>
 
             <div sec:authorize="hasRole('ROLE_ADMIN')">
-                <form method="post" th:action="@{/events/edit/__${event.getId()}__}">
+                <form method="get" th:action="@{/events/edit/__${event.getId()}__}">
                     <button type="submit">Edit</button>
                 </form>
             </div>

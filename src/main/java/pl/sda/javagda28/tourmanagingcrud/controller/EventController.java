@@ -73,7 +73,7 @@ public class EventController {
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/edit/{id}")
-    public String editEvent(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
+    public String editEvent(@Valid @ModelAttribute final ModelMap modelMap, @PathVariable("id") final Long id, final EventForm eventForm) {
         eventService.updateEvent(id, eventForm);
         return displayEvents(modelMap);
     }
