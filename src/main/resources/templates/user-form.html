@@ -6,8 +6,22 @@
 </head>
 <body>
 <div class="user-form">
-    <form action="post" th:action="@{/user}" th:object="${user}">
+    <form method="post" th:object="${userForm}" th:action="@{/users/add}">
 
+        <label for="name">Username</label>
+        <input id="name" th:field="*{username}"/>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" th:field="*{email}"/>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}"/>
+
+        <label for="passwordConfirmation">Confirm Password</label>
+        <input id="passwordConfirmation" type="password" th:field="*{confirmPassword}"/>
+
+
+        <button type="submit">SUBMIT</button>
     </form>
 </div>
 </body>

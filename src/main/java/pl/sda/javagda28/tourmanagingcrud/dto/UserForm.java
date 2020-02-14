@@ -1,4 +1,4 @@
-package pl.sda.javagda28.tourmanagingcrud.model;
+package pl.sda.javagda28.tourmanagingcrud.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

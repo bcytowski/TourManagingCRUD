@@ -7,7 +7,7 @@ import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
 import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
-import pl.sda.javagda28.tourmanagingcrud.model.EventForm;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
@@ -19,8 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
 
 @Service
 @Transactional
@@ -43,7 +41,7 @@ public class EventService {
 
 
         Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), bandsByIds, venue.get());
-        return eventRepository.saveAndFlush(event);
+        return eventRepository.save(event);
     }
 
     public void removeEvent(final Long eventId) {

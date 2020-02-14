@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.sda.javagda28.tourmanagingcrud.entity.Role;
 import pl.sda.javagda28.tourmanagingcrud.entity.User;
 import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
-import pl.sda.javagda28.tourmanagingcrud.model.UserForm;
+import pl.sda.javagda28.tourmanagingcrud.dto.UserForm;
 import pl.sda.javagda28.tourmanagingcrud.repository.UserRepository;
 
 import java.util.List;

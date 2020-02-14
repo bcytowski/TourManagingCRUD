@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="main-container">
+    <div class="venue">
+
+            <table style="border: 1px solid #000; width: 100%">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Events</th>
+
+
+                    <th></th><!--edit-->
+                    <th></th><!--remove-->
+                </tr>
+                <tr th:each="ven,loop : ${venues}">
+                    <td th:text="${loop.index}"></td>
+                    <td th:text="${ven.getName()}"></td>
+                    <td th:text="${ven.getAddress()}"></td>
+                    <td th:each="ev, loop : ${ven.getEvents()}" th:text="${ev.getName()}"></td>
+                </tr>
+            </table>
+
+
+
+<!--            <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                <form method="post"-->
+<!--                      th:action="@{/events/remove/__${event.getId()}__}">-->
+<!--                    <button type="submit">Remove</button>-->
+<!--                </form>-->
+<!--            </div>-->
+
+<!--            <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                <form method="get" th:action="@{/events/edit/__${event.getId()}__}">-->
+<!--                    <button type="submit">Edit</button>-->
+<!--                </form>-->
+<!--            </div>-->
+
+
+
+
+    </div>
+</div>
+</body>
+</html>

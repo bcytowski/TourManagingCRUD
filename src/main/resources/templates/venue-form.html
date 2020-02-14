@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="venue-form">
+    <form method="post" th:object="${venueForm}" th:action="@{/venues/add}">
+        <label for="name">Name</label>
+        <input id="name" th:field="*{name}"/>
+
+        <label for="address">Address</label>
+        <input id="address" th:field="*{address}"/>
+
+
+
+        <button type="submit">SUBMIT</button>
+    </form>
+</div>
+</body>
+</html>

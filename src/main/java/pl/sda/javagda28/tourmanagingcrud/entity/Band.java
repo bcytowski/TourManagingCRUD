@@ -3,9 +3,13 @@ package pl.sda.javagda28.tourmanagingcrud.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.List;
 @Data
 @AllArgsConstructor
@@ -22,12 +26,6 @@ public class Band {
     @Column(name = "members")
     private Long members;
 
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "Bands_Events",
-//            joinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") },
-//            inverseJoinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") }
-//    )
     @ManyToMany(mappedBy = "bands")
     private List<Event> events;
 

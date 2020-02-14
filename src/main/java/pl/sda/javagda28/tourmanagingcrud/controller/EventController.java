@@ -9,7 +9,7 @@ import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.model.EventForm;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.service.BandService;
 import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
@@ -41,7 +41,7 @@ public class EventController {
         List<Band> bands = bandService.getAllBands();
         modelMap.addAttribute("venues", venues);
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event", new EventForm());
+        modelMap.addAttribute("event-form", new EventForm());
         modelMap.addAttribute("events", events);
         modelMap.addAttribute("method", "add");
 
@@ -66,7 +66,7 @@ public class EventController {
         List<Band> bands = bandService.getAllBands();
         modelMap.addAttribute("venues", venues);
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event", eventService.createEventFormById(id));
+        modelMap.addAttribute("event-form", eventService.createEventFormById(id));
         modelMap.addAttribute("method", "edit/" + id);
 
         return "event-form";

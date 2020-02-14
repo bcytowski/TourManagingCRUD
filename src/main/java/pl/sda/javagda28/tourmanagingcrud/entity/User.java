@@ -4,8 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Collection;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import java.util.List;
 
 @Data
@@ -18,13 +24,13 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "username")
+
     private String username;
 
-    @Column(name = "email")
+
     private String email;
 
-    @Column(name = "password")
+
     private String password;
 
     @Transient

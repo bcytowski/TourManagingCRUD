@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="event-form">
-    <form method="post" th:object="${event}" th:action="@{/events/__${method}__}">
+    <form method="post" th:object="${event-form}" th:action="@{/events/__${method}__}">
         <label for="name">Event name</label>
         <input id="name" th:field="*{name}"/>
 

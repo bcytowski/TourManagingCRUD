@@ -3,7 +3,7 @@ package pl.sda.javagda28.tourmanagingcrud.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.sda.javagda28.tourmanagingcrud.entity.User;
-import pl.sda.javagda28.tourmanagingcrud.model.UserForm;
+import pl.sda.javagda28.tourmanagingcrud.dto.UserForm;
 
 
 import java.util.List;
