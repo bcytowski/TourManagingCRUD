@@ -41,7 +41,6 @@ public class UserController {
         return USERS_LIST_TEMPLATE_PATH;
     }
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("/add")
     public String viewUserForm(final ModelMap modelMap){
         List<User> allUsers = userService.getAllUsers();
@@ -52,11 +51,11 @@ public class UserController {
         return USER_FORM_TEMPLATE_PATH;
     }
 
-    @Secured("ROLE_ADMIN")
+
     @PostMapping(path = "/add")
-    public String saveUser(@Valid @ModelAttribute final UserForm userForm, final ModelMap modelMap) {
+    public String saveUser(@Valid @ModelAttribute final UserForm userForm) {
         userService.createUser(userForm);
-        return displayUsers(modelMap);
+        return "redirect:/";
     }
 
     @Secured("ROLE_ADMIN")

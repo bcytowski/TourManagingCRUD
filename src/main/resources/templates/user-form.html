@@ -23,6 +23,10 @@
         <label for="passwordConfirmation">Confirm Password</label>
         <input id="passwordConfirmation" type="password" th:field="*{confirmPassword}"/>
 
+        <label for="roleGranted">Role</label>
+        <select id="roleGranted"> <option th:each="role : ${roles}"
+                                          th:value="${role.getName()}" th:text="${role.name}"/></select>
+
 
         <button type="submit">SUBMIT</button>
     </form>
