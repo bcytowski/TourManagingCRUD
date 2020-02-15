@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.dto.VenueForm;
+import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
+import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
 
 import javax.validation.Valid;
@@ -23,10 +26,17 @@ public class VenueController {
 
     private static final String MODEL_VENUE_FORM = "venueForm";
     private static final String MODEL_VENUES_ATTRIBUTE = "venues";
+    private static final String METHOD_MODEL_ATTRIBUTE = "method";
+    private static final String ADD_METHOD_MODEL_ATTRIBUTE = "add";
+    private static final String EDIT_METHOD_MODEL_ATTRIBUTE = "edit/";
+
     private static final String VENUE_LIST_PATH = "venue-list";
-    private static final String VENUE_FORM_PATH = "venue-form";
+    private static final String VENUE_FORM_TEMPLATE_PATH = "venue-form";
+
+
 
     private final VenueService venueService;
+    private final EventService eventService;
 
     @GetMapping
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
@@ -44,12 +54,13 @@ public class VenueController {
 
         modelMap.addAttribute(MODEL_VENUES_ATTRIBUTE, allVenues);
         modelMap.addAttribute(MODEL_VENUE_FORM, new VenueForm());
-        return VENUE_FORM_PATH;
+        modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, ADD_METHOD_MODEL_ATTRIBUTE);
+        return VENUE_FORM_TEMPLATE_PATH;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/add")
-    public String saveVenue(@Valid @ModelAttribute final VenueForm venueForm, final ModelMap modelMap) {
+    public String createVenue(@Valid @ModelAttribute final VenueForm venueForm, final ModelMap modelMap) {
         venueService.createVenue(venueForm);
         return displayVenues(modelMap);
     }
@@ -60,5 +71,26 @@ public class VenueController {
         venueService.removeVenue(id);
         return displayVenues(modelMap);
     }
+
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
+    @GetMapping("/edit/{id}")
+    public String viewEditForm(@PathVariable final Long id, final ModelMap modelMap) {
+        List<Event> allEvents = eventService.getAllEvents();
+        modelMap.addAttribute("events", allEvents);
+
+        modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, EDIT_METHOD_MODEL_ATTRIBUTE + id);
+        modelMap.addAttribute(MODEL_VENUE_FORM, venueService.createVenueFormById(id));
+
+        return VENUE_FORM_TEMPLATE_PATH;
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
+    @PostMapping("/edit/{id}")
+    public String editVenue(@PathVariable final Long id,
+                            @Valid @ModelAttribute final ModelMap modelMap, final VenueForm venueForm){
+        venueService.updateVenue(id, venueForm);
+        return "redirect:/venues"; //displayVenues(modelMap);
+    }
+
 
 }

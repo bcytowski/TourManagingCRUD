@@ -26,6 +26,12 @@
         <td th:text="${us.getEmail()}"></td>
         <td th:each="role: ${us.getRoles()}" th:text="${role.getName()} + ' ' "></td>
 
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <form method="post" th:each="role :${us.getRoles()}" th:if="${!role.name.equals('ROLE_ADMIN')}"
+                  th:action="@{/users/remove/__${us.getId()}__}">
+                <button type="submit">Remove</button>
+            </form>
+        </td>
 
     </tr>
 </table>

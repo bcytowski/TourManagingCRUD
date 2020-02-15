@@ -36,11 +36,11 @@ public class EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
 
-        Optional<Venue> venue = venueRepository.findById(eventForm.getVenueId());
+        Venue venue = venueRepository.findById(eventForm.getVenueId()).orElseThrow(() -> new TourManagingException("couldnt find specific venue"));
         List<Band> bandsByIds = bandRepository.findByIdIn(eventForm.getBandIds());
 
 
-        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), bandsByIds, venue.get());
+        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), bandsByIds, venue);
         return eventRepository.save(event);
     }
 

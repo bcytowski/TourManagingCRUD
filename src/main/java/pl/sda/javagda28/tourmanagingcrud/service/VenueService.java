@@ -12,7 +12,7 @@ import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,12 +37,41 @@ public class VenueService {
 
     public void removeVenue(final Long id) {
         Venue byId = venueRepository.findById(id).orElseThrow(() -> new TourManagingException("couldnt find specific venue"));
+        if (byId.getEvents().size() == 0) {
+            venueRepository.deleteById(id);
+        } else {
+            throw new TourManagingException("venue is not empty");
+        }
+    }
 
+    public void updateVenue(final Long id, final VenueForm venueForm) {
+        Venue venue = venueRepository.findById(id)
+                .map(ven -> copyValuesFromFormToVenue(venueForm, ven))
+                .orElseThrow(() -> new TourManagingException("couldn't find specific venue"));
 
+        venueRepository.save(venue);
+    }
 
-        venueRepository.deleteById(id);
+    public Venue copyValuesFromFormToVenue(final VenueForm venueForm, final Venue venueFromDB) {
+        venueFromDB.setName(venueForm.getName());
+        venueFromDB.setAddress(venueForm.getAddress());
+        venueFromDB.setEvents(eventRepository.findByIdIn(venueForm.getEventIds()));
 
+        return venueFromDB;
     }
 
 
+    public VenueForm createVenueFormById(final Long id) {
+        Venue venue = venueRepository.findById(id)
+                .orElseThrow(() -> new TourManagingException("couldn't find specific venue"));
+
+        VenueForm venueForm = new VenueForm();
+
+        List<Long> eventIds = venue.getEvents().stream()
+                .map(event -> event.getId())
+                .collect(Collectors.toList());
+
+        return venueForm.builder().name(venue.getName())
+                .address(venue.getAddress()).eventIds(eventIds).build();
+    }
 }

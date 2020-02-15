@@ -8,14 +8,16 @@
 </head>
 <body>
 <th:block th:replace="navigation-bar :: navigator"/>
-<div class="venue-form">
-    <form method="post" th:object="${venueForm}" th:action="@{/venues/__${method}__}">
+<div class="band-form">
+    <form method="post" th:object="${bandForm}" th:action="@{/bands/__${method}__}">
         <label for="name">Name</label>
         <input id="name" th:field="*{name}"/>
 
-        <label for="address">Address</label>
-        <input id="address" th:field="*{address}"/>
+        <label for="musicGenre">Music Genre</label>
+        <input id="musicGenre" th:field="*{musicGenre}"/>
 
+        <label for="members">Members</label>
+        <input id="members" type="number" min="1" th:field="*{members}"/>
 
 
         <button type="submit">SUBMIT</button>

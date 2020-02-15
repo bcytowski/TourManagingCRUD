@@ -16,31 +16,33 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Address</th>
+                <th>Music genre</th>
+                <th>Members</th>
                 <th>Events</th>
 
 
                 <th></th><!--edit-->
                 <th></th><!--remove-->
             </tr>
-            <tr th:each="ven,loop : ${venues}">
+            <tr th:each="band,loop : ${bands}">
                 <td th:text="${loop.index+1}"></td>
-                <td th:text="${ven.getName()}"></td>
-                <td th:text="${ven.getAddress()}"></td>
+                <td th:text="${band.getName()}"></td>
+                <td th:text="${band.getMusicGenre()}"></td>
+                <td th:text="${band.getMembers()}"></td>
                 <td>
-                    <table th:each="ev, loop : ${ven.getEvents()}" th:text="${ev.getName()}"></table>
+                    <table th:each="ev, loop : ${band.getEvents()}" th:text="${ev.getName()}"></table>
                 </td>
 
 
-                <td sec:authorize="hasRole('ROLE_ADMIN')">
-                    <form method="post" th:if="${ven.events == null || ven.events.size() == 0}"
-                          th:action="@{/venues/remove/__${ven.getId()}__}">
+                <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER')">
+                    <form method="post" th:if="${band.events == null || band.events.size() == 0}"
+                          th:action="@{/bands/remove/__${band.getId()}__}">
                         <button type="submit">Remove</button>
                     </form>
                 </td>
 
-                <td sec:authorize="hasRole('ROLE_ADMIN')">
-                    <form method="get" th:action="@{/venues/edit/__${ven.getId()}__}">
+                <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER')">
+                    <form method="get" th:action="@{/bands/edit/__${band.getId()}__}">
                         <button type="submit">Edit</button>
                     </form>
                 </td>
@@ -48,12 +50,12 @@
             </tr>
 
         </table>
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER') or hasRole('ROLE_BAND')">
             <form method="get"
-                  th:action="@{/venues/add}">
-                <button type="submit">Add a new venue</button>
+                  th:action="@{/bands/add}">
+                <button type="submit">Add a band</button>
             </form>
-        </div>
+            </div>
     </div>
 </div>
 </body>
