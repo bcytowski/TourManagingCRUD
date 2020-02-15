@@ -41,7 +41,7 @@ public class EventController {
         List<Band> bands = bandService.getAllBands();
         modelMap.addAttribute("venues", venues);
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event-form", new EventForm());
+        modelMap.addAttribute("eventForm", new EventForm());
         modelMap.addAttribute("events", events);
         modelMap.addAttribute("method", "add");
 
@@ -66,7 +66,7 @@ public class EventController {
         List<Band> bands = bandService.getAllBands();
         modelMap.addAttribute("venues", venues);
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event-form", eventService.createEventFormById(id));
+        modelMap.addAttribute("eventForm", eventService.createEventFormById(id));
         modelMap.addAttribute("method", "edit/" + id);
 
         return "event-form";

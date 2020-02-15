@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+
+    <!-- include css in the header -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
+
+
+
+</head>
+<body>
+
+<th:block th:fragment="navigator">
+    <nav>
+        <div class="logo">
+            <a th:href="@{/}">TOUR MANAGING CRUD</a>
+        </div>
+        <ul class="nav-links">
+
+            <li>
+                <a th:href="@{/events}">EVENTS</a>
+            </li>
+            <li>
+                <a th:href="@{/bands}">BANDS</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/venues}">VENUES</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/users}">USERS</a>
+            </li>
+
+        </ul>
+    </nav>
+</th:block>
+
+
+</body>
+</html>

@@ -3,6 +3,7 @@ package pl.sda.javagda28.tourmanagingcrud.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 import javax.persistence.CascadeType;
@@ -26,11 +27,12 @@ public class Event {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(name = "name")
+
     private String name;
-    @Column(name = "date")
+
     private LocalDateTime date;
 
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Bands_Events",
@@ -38,8 +40,8 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") }
     )
     private List<Band> bands;
-
-    @ManyToOne
-    @JoinColumn(name = "venue_id")
+    @ToString.Exclude
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "venue_id", nullable = true)
     private Venue venue;
 }

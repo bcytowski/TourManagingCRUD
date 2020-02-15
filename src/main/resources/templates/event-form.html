@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Event form</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
 <div class="event-form">
-    <form method="post" th:object="${event-form}" th:action="@{/events/__${method}__}">
+    <form method="post" th:object="${eventForm}" th:action="@{/events/__${method}__}">
         <label for="name">Event name</label>
         <input id="name" th:field="*{name}"/>
 

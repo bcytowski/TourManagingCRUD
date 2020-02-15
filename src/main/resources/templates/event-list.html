@@ -3,30 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Events</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
 <div class="main-container">
     <div class="events">
-        <div th:each="event : ${events}">
-            <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date} + ' on a ' + ${event.getVenue().getName()}"></p>
-            <p th:text="'Bands playing on this event are '"></p>
-            <span th:each="band: ${event.getBands()}" th:text="${band.getName()} + ' ' "></span>
 
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                <form method="post"
-                      th:action="@{/events/remove/__${event.getId()}__}">
-                    <button type="submit">Remove</button>
-                </form>
-            </div>
+        <table style="border: 1px solid #000; width: 100%">
+            <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Bands</th>
 
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                <form method="get" th:action="@{/events/edit/__${event.getId()}__}">
-                    <button type="submit">Edit</button>
-                </form>
-            </div>
+                <th></th><!--edit-->
+                <th></th><!--remove-->
+            </tr>
+            <tr th:each="ev,loop : ${events}">
+                <td th:text="${loop.index+1}"></td>
+                <td th:text="${ev.getName()}"></td>
+                <td th:text="${ev.getDate()}"></td>
+                <td th:text="${ev.getVenue().getName()}"></td>
+                <td><table th:each="band: ${ev.getBands()}" th:text="${band.getName()}"></table></td>
 
+
+                <!--            <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date} + ' on a ' + ${event.getVenue().getName()}"></p>-->
+                <!--            <p th:text="'Bands playing on this event are '"></p>-->
+                <!--            <span th:each="band: ${event.getBands()}" th:text="${band.getName()} + ' ' "></span>-->
+
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <form method="post"
+                          th:action="@{/events/remove/__${ev.getId()}__}">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <form method="get" th:action="@{/events/edit/__${ev.getId()}__}">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+
+
+            </tr>
+        </table>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <form method="get" th:action="@{/events/add}">
+                <button type="submit">Add new event</button>
+            </form>
         </div>
-
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <form method="get" th:action="@{/}">
+            <button type="submit">Go to index page</button>
+        </form>
+    </div>
 
     </div>
 </div>

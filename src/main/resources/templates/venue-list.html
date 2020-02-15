@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
 <div class="main-container">
     <div class="venue">
+<header>VENUES</header>
 
             <table style="border: 1px solid #000; width: 100%">
                 <tr>
@@ -20,22 +24,20 @@
                     <th></th><!--remove-->
                 </tr>
                 <tr th:each="ven,loop : ${venues}">
-                    <td th:text="${loop.index}"></td>
+                    <td th:text="${loop.index+1}"></td>
                     <td th:text="${ven.getName()}"></td>
                     <td th:text="${ven.getAddress()}"></td>
-                    <td th:each="ev, loop : ${ven.getEvents()}" th:text="${ev.getName()}"></td>
+                    <td><table th:each="ev, loop : ${ven.getEvents()}" th:text="${ev.getName()}"></table></td>
+
+
+
+            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                <form method="post"
+                      th:action="@{/venues/remove/__${ven.getId()}__}">
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
                 </tr>
-            </table>
-
-
-
-<!--            <div sec:authorize="hasRole('ROLE_ADMIN')">-->
-<!--                <form method="post"-->
-<!--                      th:action="@{/events/remove/__${event.getId()}__}">-->
-<!--                    <button type="submit">Remove</button>-->
-<!--                </form>-->
-<!--            </div>-->
-
 <!--            <div sec:authorize="hasRole('ROLE_ADMIN')">-->
 <!--                <form method="get" th:action="@{/events/edit/__${event.getId()}__}">-->
 <!--                    <button type="submit">Edit</button>-->
@@ -44,7 +46,13 @@
 
 
 
-
+</table>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <form method="get"
+                  th:action="@{/venues/add}">
+                <button type="submit">Add a new venue</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

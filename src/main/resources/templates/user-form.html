@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>USER FORM</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
 <div class="user-form">
     <form method="post" th:object="${userForm}" th:action="@{/users/add}">
 
