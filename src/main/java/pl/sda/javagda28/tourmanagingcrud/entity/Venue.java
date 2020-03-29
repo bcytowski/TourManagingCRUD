@@ -28,6 +28,10 @@ public class Venue {
     private String name;
 
     private String address;
+
+    @Column(length = 2000)
+    private String bio;
+
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "venue", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Event> events;

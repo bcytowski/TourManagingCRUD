@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VenueController {
 
+    private static final String VENUE_MODEL_ATTRIBUTE = "venue";
     private static final String MODEL_VENUE_FORM = "venueForm";
     private static final String MODEL_VENUES_ATTRIBUTE = "venues";
     private static final String METHOD_MODEL_ATTRIBUTE = "method";
@@ -32,7 +33,7 @@ public class VenueController {
 
     private static final String VENUE_LIST_PATH = "venue-list";
     private static final String VENUE_FORM_TEMPLATE_PATH = "venue-form";
-
+    private static final String VENUE_INFO_TEMPLATE_PATH = "venue-info";
 
 
     private final VenueService venueService;
@@ -45,6 +46,12 @@ public class VenueController {
 
         modelMap.addAttribute(MODEL_VENUES_ATTRIBUTE, allVenues);
         return VENUE_LIST_PATH;
+    }
+    @GetMapping("/{id}")
+    public String viewSpecificVenue(@PathVariable("id") final Long id, final ModelMap modelMap) {
+        Venue venueById = venueService.findVenueById(id);
+        modelMap.addAttribute(VENUE_MODEL_ATTRIBUTE, venueById);
+        return VENUE_INFO_TEMPLATE_PATH;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})

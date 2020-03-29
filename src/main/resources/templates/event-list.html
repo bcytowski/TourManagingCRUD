@@ -27,8 +27,8 @@
                 <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
             </tr>
             <tr th:each="ev,loop : ${events}">
-                <td th:text="${loop.index+1}"></td>
-                <td th:text="${ev.getName()}"></td>
+                <td th:text="${loop.index+1}" ></td>
+                <td><a th:href="@{/events/__${ev.getId()}__}" th:text="${ev.getName()}"></a></td>
                 <td th:text="${ev.getDate()}"></td>
                 <td th:text="${ev.getVenue().getName()}"></td>
                 <td>

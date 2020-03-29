@@ -22,6 +22,8 @@ public class VenueForm {
     @NotNull
     private String address;
 
+    private String bio;
+
     List<Long> eventIds = new ArrayList<>();
 
 }

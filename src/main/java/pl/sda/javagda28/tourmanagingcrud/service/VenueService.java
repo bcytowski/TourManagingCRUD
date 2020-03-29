@@ -30,7 +30,7 @@ public class VenueService {
 
         List<Event> byIdIn = eventRepository.findByIdIn(venueForm.getEventIds());
 
-        Venue venue = new Venue(null, venueForm.getName(), venueForm.getAddress(), byIdIn);
+        Venue venue = new Venue(null, venueForm.getName(), venueForm.getAddress(), venueForm.getBio() , byIdIn);
 
         return venueRepository.save(venue);
     }
@@ -55,6 +55,7 @@ public class VenueService {
     public Venue copyValuesFromFormToVenue(final VenueForm venueForm, final Venue venueFromDB) {
         venueFromDB.setName(venueForm.getName());
         venueFromDB.setAddress(venueForm.getAddress());
+        venueFromDB.setBio(venueForm.getBio());
         venueFromDB.setEvents(eventRepository.findByIdIn(venueForm.getEventIds()));
 
         return venueFromDB;
@@ -72,6 +73,10 @@ public class VenueService {
                 .collect(Collectors.toList());
 
         return venueForm.builder().name(venue.getName())
-                .address(venue.getAddress()).eventIds(eventIds).build();
+                .address(venue.getAddress()).bio(venue.getBio()).eventIds(eventIds).build();
+    }
+
+    public Venue findVenueById(final Long id) {
+        return venueRepository.findById(id).orElseThrow(()->new TourManagingException("couldn't find specific venue"));
     }
 }
