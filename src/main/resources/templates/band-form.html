@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
+<body>
+<th:block th:replace="navigation-bar :: navigator"/>
+<div class="hero">
+    <div class="form-box">
+
+    <form method="post" th:object="${bandForm}" th:action="@{/bands/__${method}__}" class="input-group">
+        <input type="text" name="bandName" class="input-field"
+               placeholder="Band Name" required th:field="*{name}">
+
+        <input type="text" name="musicGenre" class="input-field"
+               placeholder="Music Genre" required th:field="*{musicGenre}">
+
+        <input type="number" name="members" class="input-field"
+               placeholder="Members" min="1" required th:field="*{members}">
+
+        <input type="text" name="bio" class="input-field"
+               placeholder="Bio" th:field="*{bio}">
+
+        <input type="text" name="youTubeLink" class="input-field"
+               placeholder="You Tube Link" th:field="*{youTubeLink}">
+
+
+
+        <button class="submit-btn" type="submit">SUBMIT</button>
+    </form>
+    </div>
+</div>
+<script th:src="@{../webjars/jquery/1.9.1/jquery.min.js}"></script>
+<script th:src="@{../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+</body>
+</html>

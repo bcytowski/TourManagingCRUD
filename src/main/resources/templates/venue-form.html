@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Index page</title>
+    <title>Venue form</title>
     <base href="/">
     <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
     <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
@@ -12,13 +12,18 @@
 </head>
 <body>
 <th:block th:replace="navigation-bar :: navigator"/>
+<div class="venue-form">
+    <form method="post" th:object="${venueForm}" th:action="@{/venues/__${method}__}">
+        <label for="name">Name</label>
+        <input id="name" th:field="*{name}"/>
 
-<div class="gibs">
-    <div align="left" class="text-box">
-<h1>WELCOME TO AN EVENT MANAGER</h1>
-<h2>Tool dedicated to organising music events</h2>
-    </div>
+        <label for="address">Address</label>
+        <input id="address" th:field="*{address}"/>
 
+
+
+        <button type="submit">SUBMIT</button>
+    </form>
 </div>
 
 </body>

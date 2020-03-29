@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
+    <title>Band info</title>
+    <script th:src="@{../webjars/jquery/1.9.1/jquery.min.js}"></script>
+    <script th:src="@{../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
+<body>
+<th:block th:replace="navigation-bar :: navigator"/>
+
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-7 bg-white text-body wpis">
+                <header>
+                    <h1 th:text="${band.name}" class="h2 font-weight-bold text-uppercase ml-0 mb-4"></h1>
+                </header>
+                <p th:text="${band.bio}"></p>
+
+
+            </div>
+            <div class="col-lg-4 ytplayer">
+                <iframe width="560" height="315" th:src="@{https://www.youtube.com/embed/{url} (url=${band.getYouTubeLink()})}" frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </div>
+
+
+        </div>
+    </div>
+</article>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <form method="get" th:action="@{/}">
+        <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Back to the index page</button>
+    </form>
+</div>
+</body>
+</html>

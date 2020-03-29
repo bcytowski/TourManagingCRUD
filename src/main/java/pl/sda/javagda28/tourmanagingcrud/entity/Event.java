@@ -3,8 +3,19 @@ package pl.sda.javagda28.tourmanagingcrud.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,11 +27,14 @@ public class Event {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "date")
-    private LocalDateTime date;
 
+    private String name;
+
+    private LocalDateTime date;
+    @Column(length = 2000)
+    private String bio;
+
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Bands_Events",
@@ -28,8 +42,8 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") }
     )
     private List<Band> bands;
-
-    @ManyToOne
-    @JoinColumn(name = "venue_id")
+    @ToString.Exclude
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "venue_id", nullable = true)
     private Venue venue;
 }

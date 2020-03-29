@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <title>Band list</title>
+    <script th:src="@{../webjars/jquery/1.9.1/jquery.min.js}"></script>
+    <script th:src="@{../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
+<body>
+<th:block th:replace="navigation-bar :: navigator"/>
+<div class="main-container">
+    <div class="band">
+
+
+        <table class="table table-striped table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Music genre</th>
+                <th>Members</th>
+                <th>Events</th>
+
+
+                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+            </tr>
+            <tr th:each="band,loop : ${bands}">
+                <td th:text="${loop.index+1}"></td>
+                <td><a th:href="@{/bands/__${band.getId()}__}" th:text="${band.getName()}"></a></td>
+                <td th:text="${band.getMusicGenre()}"></td>
+                <td th:text="${band.getMembers()}"></td>
+                <td>
+                    <table th:each="ev, loop : ${band.getEvents()}" th:text="${ev.getName()}"></table>
+                </td>
+
+
+                <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER')">
+                    <form method="post" th:if="${band.events == null || band.events.size() == 0}"
+                          th:action="@{/bands/remove/__${band.getId()}__}">
+                        <button type="submit" class="btn btn-primary btn-sm">Remove</button>
+                    </form>
+                </td>
+
+                <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER')">
+                    <form method="get" th:action="@{/bands/edit/__${band.getId()}__}">
+                        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                    </form>
+                </td>
+
+            </tr>
+
+        </table>
+        <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ORGANISER') or hasRole('ROLE_BAND')">
+            <form method="get"
+                  th:action="@{/bands/add}">
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Add a new band</button>
+            </form>
+        </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <form method="get" th:action="@{/}">
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Back to the index page</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

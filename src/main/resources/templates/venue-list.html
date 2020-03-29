@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Event list</title>
+    <title>Venue list</title>
     <base href="/">
     <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
     <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
@@ -13,52 +13,47 @@
 <body>
 <th:block th:replace="navigation-bar :: navigator"/>
 <div class="main-container">
-    <div class="events">
-
-        <table class="table table-striped table-dark">
+    <div class="venue">
+             <table class="table table-striped table-dark">
             <tr>
-                <th>No.</th>
+                <th>ID</th>
                 <th>Name</th>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>Bands</th>
+                <th>Address</th>
+                <th>Events</th>
+
 
                 <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
                 <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
             </tr>
-            <tr th:each="ev,loop : ${events}">
-                <td th:text="${loop.index+1}" ></td>
-                <td><a th:href="@{/events/__${ev.getId()}__}" th:text="${ev.getName()}"></a></td>
-                <td th:text="${ev.getDate()}"></td>
-                <td th:text="${ev.getVenue().getName()}"></td>
+            <tr th:each="ven,loop : ${venues}">
+                <td th:text="${loop.index+1}"></td>
+                <td><a th:href="@{/venues/__${ven.getId()}__}" th:text="${ven.getName()}"></a></td>
+                <td th:text="${ven.getAddress()}"></td>
                 <td>
-                    <table th:each="band: ${ev.getBands()}" th:text="${band.getName()}"></table>
+                    <table th:each="ev, loop : ${ven.getEvents()}" th:text="${ev.getName()}"></table>
                 </td>
 
 
-                <!--            <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date} + ' on a ' + ${event.getVenue().getName()}"></p>-->
-                <!--            <p th:text="'Bands playing on this event are '"></p>-->
-                <!--            <span th:each="band: ${event.getBands()}" th:text="${band.getName()} + ' ' "></span>-->
-
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
-                    <form method="post"
-                          th:action="@{/events/remove/__${ev.getId()}__}">
+                    <form method="post" th:if="${ven.events == null || ven.events.size() == 0}"
+                          th:action="@{/venues/remove/__${ven.getId()}__}">
                         <button type="submit" class="btn btn-primary btn-sm">Remove</button>
                     </form>
                 </td>
 
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
-                    <form method="get" th:action="@{/events/edit/__${ev.getId()}__}">
+                    <form method="get" th:action="@{/venues/edit/__${ven.getId()}__}">
                         <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                     </form>
                 </td>
 
-
             </tr>
+
         </table>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <form method="get" th:action="@{/events/add}">
-                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Add new event</button>
+            <form method="get"
+                  th:action="@{/venues/add}">
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Add a new venue</button>
             </form>
         </div>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
@@ -66,10 +61,8 @@
                 <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Back to the index page</button>
             </form>
         </div>
-
     </div>
 </div>
-
 
 </body>
 </html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>User edit</title>
+  <base href="/">
+  <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
+<body>
+<th:block th:replace="navigation-bar :: navigator"/>
+<div class="user-form">
+  <form method="post" th:object="${userForm}" th:action="@{/users/__${userForm.username}__/edit}">
+    <label for="username">Username</label>
+    <input id="username" readonly th:field="*{username}" th:value="*{username}"/>
+
+    <label for="email">Email</label>
+    <input id="email" th:field="*{email}"/>
+
+    <label for="password">Password</label>
+    <input id="password" type="password" th:field="*{password}"/>
+
+    <label for="passwordConfirmation">Confirm Password</label>
+    <input id="passwordConfirmation" type="password" th:field="*{confirmPassword}"/>
+
+    <button type="submit">Create User</button>
+  </form>
+</div>
+
+</body>
+</html>

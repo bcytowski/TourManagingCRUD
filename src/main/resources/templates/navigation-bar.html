@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
+<body>
+
+<th:block th:fragment="navigator">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+        <a class="navbar-brand" th:href="@{/}"><img src="../img/guitaricon.png" width="30" height="30"
+                                                    class="d-inline-block mr-1 align-bottom"></a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
+                aria-controls="mainmenu" aria-expanded="false" aria-label="navigation switcher">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainmenu">
+
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/events}">EVENTS</a>
+                </li>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"
+                    id="submenu" aria-haspopup="true">BANDS</a>
+                    <div class="dropdown-menu" aria-labelledby="submenu">
+
+                        <a class="dropdown-item" th:href="@{/bands/add}">REGISTER YOUR BAND</a>
+                        <a class="dropdown-item" th:href="@{/bands}">BANDS LIST</a>
+                    </div>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/venues}">VENUES</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/users}">USERS</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">LOGIN</a>
+                </li>
+                <li class="nav-item" sec:authorize="isFullyAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">LOGOUT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" >CONTACT</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+</th:block>
+
+
+</body>
+</html>

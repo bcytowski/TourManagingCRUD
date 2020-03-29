@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Event form</title>
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
 <div class="event-form">
-    <form method="post" th:object="${event}" th:action="@{/events/__${method}__}">
+    <form method="post" th:object="${eventForm}" th:action="@{/events/__${method}__}">
         <label for="name">Event name</label>
         <input id="name" th:field="*{name}"/>
 
@@ -31,5 +38,6 @@
     </form>
 
 </div>
+
 </body>
 </html>

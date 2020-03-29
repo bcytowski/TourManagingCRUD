@@ -1,23 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<html>
-<head></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+</head>
 <body>
-<h1>Login</h1>
-<form name='f' th:action="login" method='POST'>
-    <table>
-        <tr>
-            <td>User:</td>
-            <td><input type='text' name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
-</form>
+<th:block th:replace="navigation-bar :: navigator"/>
+<section class="container-fluid bg">
+    <section class="row justify-content-center">
+        <section class="col-12 col-sm-6 col-md-3">
+            <form class="form-container">
+                <div class="form-group">
+                    <label for="userName">Username</label>
+                    <input type="text" class="form-control" id="userName" aria-describedby="userNameHelp">
+
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+
+                <button type="submit" class="btn-block btn-dark">Submit</button>
+            </form>
+        </section>
+    </section>
+</section>
+
 </body>
 </html>

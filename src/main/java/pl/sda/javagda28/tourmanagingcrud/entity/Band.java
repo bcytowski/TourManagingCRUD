@@ -2,32 +2,39 @@ package pl.sda.javagda28.tourmanagingcrud.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
+import lombok.ToString;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity(name = "bands")
 public class Band {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(name = "name")
+
     private String name;
     @Column(name = "music_genre")
     private String musicGenre;
-    @Column(name = "members")
+
     private Long members;
 
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "Bands_Events",
-//            joinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") },
-//            inverseJoinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") }
-//    )
+    @Column(length = 2000)
+    private String bio;
+
+    private String youTubeLink;
+
+    @ToString.Exclude
     @ManyToMany(mappedBy = "bands")
     private List<Event> events;
 

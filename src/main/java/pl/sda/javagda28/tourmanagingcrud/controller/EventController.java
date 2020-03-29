@@ -9,7 +9,7 @@ import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.model.EventForm;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.service.BandService;
 import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
@@ -25,13 +25,32 @@ public class EventController {
     private final VenueService venueService;
     private final BandService bandService;
 
-    @GetMapping("/")
+    private static final String EVENT_MODEL_ATTRIBUTE = "event";
+    private static final String EVENTS_MODEL_ATTRIBUTE = "events";
+    private static final String VENUES_MODEL_ATTRIBUTE = "venues";
+    private static final String BANDS_MODEL_ATTRIBUTE = "bands";
+    private static final String EVENT_FORM_MODEL_ATTRIBUTE = "eventForm";
+    private static final String METHOD_MODEL_ATTRIBUTE = "method";
+    private static final String ADD_METHOD_MODEL_ATTRIBUTE = "add";
+    private static final String EDIT_METHOD_MODEL_ATTRIBUTE = "edit/";
+
+    private static final String EVENT_INFO_TEMPLATE_PATH = "event-info";
+    private static final String EVENT_LIST_TEMPLATE_PATH = "event-list";
+    private static final String EVENT_FORM_TEMPLATE_PATH = "event-form";
+
+    @GetMapping
     public String displayEvents(final ModelMap modelMap) {
         List<Event> events = eventService.getAllEvents();
 
-        modelMap.addAttribute("events", events);
+        modelMap.addAttribute(EVENTS_MODEL_ATTRIBUTE, events);
 
-        return "event-list";
+        return EVENT_LIST_TEMPLATE_PATH;
+    }
+    @GetMapping("/{id}")
+    public String viewSpecificEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
+        Event eventById = eventService.findEventById(id);
+        modelMap.addAttribute(EVENT_MODEL_ATTRIBUTE, eventById);
+        return EVENT_INFO_TEMPLATE_PATH;
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/add")
@@ -39,42 +58,42 @@ public class EventController {
         List<Event> events = eventService.getAllEvents();
         List<Venue> venues = venueService.getAllVenues();
         List<Band> bands = bandService.getAllBands();
-        modelMap.addAttribute("venues", venues);
-        modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event", new EventForm());
-        modelMap.addAttribute("events", events);
-        modelMap.addAttribute("method", "add");
+        modelMap.addAttribute(VENUES_MODEL_ATTRIBUTE, venues);
+        modelMap.addAttribute(BANDS_MODEL_ATTRIBUTE, bands);
+        modelMap.addAttribute(EVENT_FORM_MODEL_ATTRIBUTE, new EventForm());
+        modelMap.addAttribute(EVENTS_MODEL_ATTRIBUTE, events);
+        modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, ADD_METHOD_MODEL_ATTRIBUTE);
 
-        return "event-form";
+        return EVENT_FORM_TEMPLATE_PATH;
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/add")
     public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, final ModelMap modelMap) {
         eventService.createEvent(eventForm);
-        return displayEvents(modelMap);
+        return "redirect:/events";
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/remove/{id}")
     public String removeEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
         eventService.removeEvent(id);
-        return displayEvents(modelMap);
+        return "redirect:/events";
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/edit/{id}")
-    public String getEventEditForm(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
+    public String viewEditForm(@PathVariable("id") final Long id, final ModelMap modelMap) {
         List<Venue> venues = venueService.getAllVenues();
         List<Band> bands = bandService.getAllBands();
-        modelMap.addAttribute("venues", venues);
-        modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("event", eventService.createEventFormById(id));
-        modelMap.addAttribute("method", "edit/" + id);
-
-        return "event-form";
+        modelMap.addAttribute(VENUES_MODEL_ATTRIBUTE, venues);
+        modelMap.addAttribute(BANDS_MODEL_ATTRIBUTE, bands);
+        modelMap.addAttribute(EVENT_FORM_MODEL_ATTRIBUTE, eventService.createEventFormById(id));
+        modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, EDIT_METHOD_MODEL_ATTRIBUTE + id);
+        return EVENT_FORM_TEMPLATE_PATH;
     }
+
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/edit/{id}")
-    public String editEvent(@PathVariable("id") final Long id, final ModelMap modelMap, final EventForm eventForm) {
+    public String editEvent(@Valid @ModelAttribute final ModelMap modelMap, @PathVariable("id") final Long id, final EventForm eventForm) {
         eventService.updateEvent(id, eventForm);
-        return displayEvents(modelMap);
+        return "redirect:/events";
     }
 }

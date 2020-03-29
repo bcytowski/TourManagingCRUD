@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.model.EventForm;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
@@ -35,12 +36,12 @@ public class EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
 
-        Optional<Venue> venue = venueRepository.findById(eventForm.getVenueId());
+        Venue venue = venueRepository.findById(eventForm.getVenueId()).orElseThrow(() -> new TourManagingException("couldnt find specific venue"));
         List<Band> bandsByIds = bandRepository.findByIdIn(eventForm.getBandIds());
 
 
-        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), bandsByIds, venue.get());
-        return eventRepository.saveAndFlush(event);
+        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), eventForm.getBio(), bandsByIds, venue);
+        return eventRepository.save(event);
     }
 
     public void removeEvent(final Long eventId) {
@@ -48,30 +49,48 @@ public class EventService {
     }
 
     public void updateEvent(final Long id, final EventForm eventForm) {
-        Optional<Event> event = eventRepository.findById(id);
-        Event e = event.get();
-        e.setName(eventForm.getName());
+        Event event = eventRepository.findById(id)
+                .map(e -> copyValuesFromFormToEvent(eventForm, e))
+                .orElseThrow(() -> new IllegalArgumentException(" "));
+
+        eventRepository.save(event);
+    }
+
+    private Event copyValuesFromFormToEvent(EventForm eventForm, Event eventFromDb) {
+        eventFromDb.setName(eventForm.getName());
+        eventFromDb.setDate(getStartDateTime(eventForm));
+        eventFromDb.setBio(eventForm.getBio());
+        eventFromDb.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
+        eventFromDb.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
+
+        return eventFromDb;
+    }
+
+    private LocalDateTime getStartDateTime(EventForm eventForm) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
         LocalTime localTime = LocalTime.of(20, 0);
-        LocalDateTime localDateTime = LocalDateTime.of(eventDate, localTime);
-        e.setDate(localDateTime);
-        e.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
-        e.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
-        eventRepository.save(e);
+        return LocalDateTime.of(eventDate, localTime);
     }
 
-    public EventForm createEventFormById (final Long id){
-        Event event = eventRepository.findById(id).get();
+    public EventForm createEventFormById(final Long id) {
+        final Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new TourManagingException("couldn't find specific event"));
+
 
         EventForm eventForm = new EventForm();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
         List<Long> bandIds = event.getBands().stream()
                 .map(band -> band.getId())
                 .collect(Collectors.toList());
 
-        return eventForm.builder().name(event.getName()).date(event.getDate().format(formatter))
+        return eventForm.builder().name(event.getName()).date(event.getDate().format(formatter)).bio(event.getBio())
                 .venueId(event.getVenue().getId()).bandIds(bandIds).build();
+    }
+
+    public Event findEventById(final Long id) {
+        return eventRepository.findById(id).orElseThrow(() -> new TourManagingException("couldn't find specific event"));
     }
 }
