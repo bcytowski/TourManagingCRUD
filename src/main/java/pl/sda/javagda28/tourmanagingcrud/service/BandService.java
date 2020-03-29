@@ -14,6 +14,7 @@ import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,7 @@ public class BandService {
     public void createBand(final BandForm bandForm) {
         List<Event> byIdIn = eventRepository.findByIdIn(bandForm.getEventIds());
 
-        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), byIdIn);
+        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), byIdIn);
         bandRepository.save(band);
     }
 
@@ -51,6 +52,7 @@ public class BandService {
         bandFromDB.setName(bandForm.getName());
         bandFromDB.setMusicGenre(bandForm.getMusicGenre());
         bandFromDB.setMembers(bandForm.getMembers());
+        bandFromDB.setBio(bandForm.getBio());
         bandFromDB.setEvents(eventRepository.findByIdIn(bandForm.getEventIds()));
 
         return bandFromDB;
@@ -67,7 +69,13 @@ public class BandService {
                 .collect(Collectors.toList());
 
         return bandForm.builder().name(band.getName()).musicGenre(band.getMusicGenre())
-                .members(band.getMembers()).eventIds(eventIds).build();
+                .members(band.getMembers()).bio(band.getBio()).eventIds(eventIds).build();
+    }
+
+    public Band findBandById(final Long id){
+       Band band = bandRepository.findById(id)
+                .orElseThrow(()-> new TourManagingException("couldn't find specific band"));
+        return band;
     }
 
 

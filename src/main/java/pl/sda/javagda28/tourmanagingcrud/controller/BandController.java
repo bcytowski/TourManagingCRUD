@@ -3,6 +3,7 @@ package pl.sda.javagda28.tourmanagingcrud.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.sda.javagda28.tourmanagingcrud.dto.BandForm;
-import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
+
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.service.BandService;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BandController {
 
+    private static final String BAND_MODEL_ATTRIBUTE = "band";
     private static final String BAND_LIST_MODEL_ATTRIBUTE = "bands";
     private static final String BAND_FORM_MODEL_ATTRIBUTE = "bandForm";
     private static final String EVENTS_MODEL_ATTRIBUTE = "events";
@@ -31,8 +33,9 @@ public class BandController {
     private static final String ADD_METHOD_MODEL_ATTRIBUTE = "add";
     private static final String EDIT_METHOD_MODEL_ATTRIBUTE = "edit/";
 
-    private static final String BAND_LIST_TEMPLATE = "band-list";
-    private static final String BAND_FORM_TEMPLATE = "band-form";
+    private static final String BAND_LIST_TEMPLATE_PATH = "band-list";
+    private static final String BAND_FORM_TEMPLATE_PATH = "band-form";
+    private static final String BAND_INFO_TEMPLATE_PATH = "band-info";
 
 
     private final BandService bandService;
@@ -43,7 +46,14 @@ public class BandController {
     public String displayBands(final ModelMap modelMap) {
         List<Band> allBands = bandService.getAllBands();
         modelMap.addAttribute(BAND_LIST_MODEL_ATTRIBUTE, allBands);
-        return BAND_LIST_TEMPLATE;
+        return BAND_LIST_TEMPLATE_PATH;
+    }
+
+    @GetMapping("/{id}")
+    public String viewSpecificBand(@PathVariable("id") final Long id, final ModelMap modelMap) {
+        Band bandById = bandService.findBandById(id);
+        modelMap.addAttribute(BAND_MODEL_ATTRIBUTE, bandById);
+        return BAND_INFO_TEMPLATE_PATH;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER", "ROLE_BAND"})
@@ -54,7 +64,7 @@ public class BandController {
         modelMap.addAttribute(BAND_LIST_MODEL_ATTRIBUTE, allBands);
         modelMap.addAttribute(BAND_FORM_MODEL_ATTRIBUTE, new BandForm());
         modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, ADD_METHOD_MODEL_ATTRIBUTE);
-        return BAND_FORM_TEMPLATE;
+        return BAND_FORM_TEMPLATE_PATH;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER", "ROLE-BAND"})
@@ -81,7 +91,7 @@ public class BandController {
         modelMap.addAttribute(BAND_LIST_MODEL_ATTRIBUTE, allBands);
         modelMap.addAttribute(BAND_FORM_MODEL_ATTRIBUTE, bandService.createBandFormById(id));
         modelMap.addAttribute(METHOD_MODEL_ATTRIBUTE, EDIT_METHOD_MODEL_ATTRIBUTE + id);
-        return BAND_FORM_TEMPLATE;
+        return BAND_FORM_TEMPLATE_PATH;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER", "ROLE-BAND"})
@@ -91,4 +101,6 @@ public class BandController {
         bandService.updateBand(id, bandForm);
         return "redirect:/bands";
     }
+
+
 }

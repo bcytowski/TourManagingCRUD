@@ -40,7 +40,7 @@ public class EventService {
         List<Band> bandsByIds = bandRepository.findByIdIn(eventForm.getBandIds());
 
 
-        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), bandsByIds, venue);
+        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), eventForm.getBio(), bandsByIds, venue);
         return eventRepository.save(event);
     }
 
@@ -59,6 +59,7 @@ public class EventService {
     private Event copyValuesFromFormToEvent(EventForm eventForm, Event eventFromDb) {
         eventFromDb.setName(eventForm.getName());
         eventFromDb.setDate(getStartDateTime(eventForm));
+        eventFromDb.setBio(eventForm.getBio());
         eventFromDb.setBands(bandRepository.findByIdIn(eventForm.getBandIds()));
         eventFromDb.setVenue(venueRepository.findById(eventForm.getVenueId()).get());
 
@@ -72,9 +73,9 @@ public class EventService {
         return LocalDateTime.of(eventDate, localTime);
     }
 
-    public EventForm createEventFormById (final Long id){
+    public EventForm createEventFormById(final Long id) {
         final Event event = eventRepository.findById(id)
-                .orElseThrow(()-> new TourManagingException("couldn't find specific event"));
+                .orElseThrow(() -> new TourManagingException("couldn't find specific event"));
 
 
         EventForm eventForm = new EventForm();
@@ -85,7 +86,11 @@ public class EventService {
                 .map(band -> band.getId())
                 .collect(Collectors.toList());
 
-        return eventForm.builder().name(event.getName()).date(event.getDate().format(formatter))
+        return eventForm.builder().name(event.getName()).date(event.getDate().format(formatter)).bio(event.getBio())
                 .venueId(event.getVenue().getId()).bandIds(bandIds).build();
+    }
+
+    public Event findEventById(final Long id) {
+        return eventRepository.findById(id).orElseThrow(() -> new TourManagingException("couldn't find specific event"));
     }
 }

@@ -25,6 +25,7 @@ public class EventController {
     private final VenueService venueService;
     private final BandService bandService;
 
+    private static final String EVENT_MODEL_ATTRIBUTE = "event";
     private static final String EVENTS_MODEL_ATTRIBUTE = "events";
     private static final String VENUES_MODEL_ATTRIBUTE = "venues";
     private static final String BANDS_MODEL_ATTRIBUTE = "bands";
@@ -33,6 +34,7 @@ public class EventController {
     private static final String ADD_METHOD_MODEL_ATTRIBUTE = "add";
     private static final String EDIT_METHOD_MODEL_ATTRIBUTE = "edit/";
 
+    private static final String EVENT_INFO_TEMPLATE_PATH = "event-info";
     private static final String EVENT_LIST_TEMPLATE_PATH = "event-list";
     private static final String EVENT_FORM_TEMPLATE_PATH = "event-form";
 
@@ -43,6 +45,12 @@ public class EventController {
         modelMap.addAttribute(EVENTS_MODEL_ATTRIBUTE, events);
 
         return EVENT_LIST_TEMPLATE_PATH;
+    }
+    @GetMapping("/{id}")
+    public String viewSpecificEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
+        Event eventById = eventService.findEventById(id);
+        modelMap.addAttribute(EVENT_MODEL_ATTRIBUTE, eventById);
+        return EVENT_INFO_TEMPLATE_PATH;
     }
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/add")

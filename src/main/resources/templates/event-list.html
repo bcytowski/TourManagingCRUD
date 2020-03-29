@@ -2,16 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Events</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
+    <title>Event list</title>
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
 </head>
 <body>
 <th:block th:replace="navigation-bar :: navigator"/>
 <div class="main-container">
     <div class="events">
 
-        <table style="border: 1px solid #000; width: 100%">
+        <table class="table table-striped table-dark">
             <tr>
                 <th>No.</th>
                 <th>Name</th>
@@ -19,15 +23,17 @@
                 <th>Venue</th>
                 <th>Bands</th>
 
-                <th></th><!--edit-->
-                <th></th><!--remove-->
+                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
             </tr>
             <tr th:each="ev,loop : ${events}">
                 <td th:text="${loop.index+1}"></td>
                 <td th:text="${ev.getName()}"></td>
                 <td th:text="${ev.getDate()}"></td>
                 <td th:text="${ev.getVenue().getName()}"></td>
-                <td><table th:each="band: ${ev.getBands()}" th:text="${band.getName()}"></table></td>
+                <td>
+                    <table th:each="band: ${ev.getBands()}" th:text="${band.getName()}"></table>
+                </td>
 
 
                 <!--            <p th:text="'Event name is ' + ${event.name} + ' and it starts at ' + ${event.date} + ' on a ' + ${event.getVenue().getName()}"></p>-->
@@ -37,13 +43,13 @@
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                     <form method="post"
                           th:action="@{/events/remove/__${ev.getId()}__}">
-                        <button type="submit">Remove</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Remove</button>
                     </form>
                 </td>
 
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                     <form method="get" th:action="@{/events/edit/__${ev.getId()}__}">
-                        <button type="submit">Edit</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                     </form>
                 </td>
 
@@ -52,17 +58,18 @@
         </table>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <form method="get" th:action="@{/events/add}">
-                <button type="submit">Add new event</button>
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Add new event</button>
             </form>
         </div>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <form method="get" th:action="@{/}">
-            <button type="submit">Go to index page</button>
-        </form>
-    </div>
+            <form method="get" th:action="@{/}">
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Back to the index page</button>
+            </form>
+        </div>
 
     </div>
 </div>
+
 
 </body>
 </html>

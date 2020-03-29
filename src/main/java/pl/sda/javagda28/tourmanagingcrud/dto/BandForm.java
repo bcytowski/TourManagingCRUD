@@ -23,5 +23,8 @@ public class BandForm {
     @NotNull
     public Long members;
 
+
+    public String bio;
+
     List<Long> eventIds = new ArrayList<>();
 }

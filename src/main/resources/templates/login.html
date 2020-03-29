@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>LOGIN PAGE</title>
+    <title>Login page</title>
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
 </head>
 <body>
+<th:block th:replace="navigation-bar :: navigator"/>
+<div class="hero">
+    <div class="form-box">
+        <div class="button-box">
+            <div id="btn"></div>
+            <button type="button" class="toggle-btn" onclick="login()">Log In</button>
+            <button type="button" class="toggle-btn" onclick="register()">Register</button>
+        </div>
+<!--        <div class="social-icons">-->
+<!--            <img src="img/fb.png">-->
+<!--            <img src="img/tw.png">-->
+<!--            <img src="img/gp.png">-->
+<!--        </div>-->
+        <form id="login" th:action="@{/login}" method="post" class="input-group">
+
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    Invalid username and password.
+                </div>
+            </div>
+
+            <div th:if="${param.logout}">
+                <div class="alert alert-info">
+                    You have been logged out.
+                </div>
+            </div>
+
+            <input type="text" name="username" class="input-field"
+                   placeholder="User Name" required>
+            <input type="password" name="password" class="input-field"
+                   placeholder="Enter Password" required>
+
+            <button type="submit" class="submit-btn">Log In</button>
+        </form>
+        <form id="register" method="post" th:object="${userForm}" th:action="@{/users/add}" class="input-group">
+            <input type="text" name="username" class="input-field"
+                   placeholder="User Name" required th:field="*{username}">
+
+            <input type="text" name="email" class="input-field"
+                   placeholder="Email Address" required th:field="*{email}">
+
+            <input type="text" name="password" class="input-field"
+                   placeholder="Enter Password" required th:field="*{password}">
+
+            <input type="text" name="confirmPassword" class="input-field"
+                   placeholder="Confirm Password" required th:field="*{confirmPassword}">
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
+    var z = document.getElementById("btn");
+
+    function register() {
+        x.style.left="-400px";
+        y.style.left="50px";
+        z.style.left="110px";
+    }
+    function login() {
+        x.style.left="50px";
+        y.style.left="450px";
+        z.style.left="0px";
+    }
+
+</script>
+
 
 </body>
 </html>

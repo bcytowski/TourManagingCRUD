@@ -29,6 +29,9 @@ public class Band {
 
     private Long members;
 
+    @Column(length = 2000)
+    private String bio;
+
     @ToString.Exclude
     @ManyToMany(mappedBy = "bands")
     private List<Event> events;

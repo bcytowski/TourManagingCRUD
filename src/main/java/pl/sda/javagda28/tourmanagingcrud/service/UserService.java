@@ -51,12 +51,10 @@ public class UserService {
         }
     }
 
-    public void updateUser(final UserForm userForm, final String username, final Long id) {
-        if (!userForm.getUsername().equals(username)) {
-            throw new TourManagingException("You filthy hacker! That's not the same user!");
-        }
+    public void updateUser(final UserForm userForm, final Long id) {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new TourManagingException("Cannot update non existing user"));
+        user.setUsername(userForm.getUsername());
         user.setEmail(userForm.getEmail());
         user.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(user);

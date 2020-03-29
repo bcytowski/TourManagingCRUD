@@ -27,6 +27,8 @@ public class EventForm {
     @NotNull
     private Long venueId;
 
+    private String bio;
+
     private List<Long> bandIds = new ArrayList<Long>();
 
 }

@@ -31,6 +31,8 @@ public class Event {
     private String name;
 
     private LocalDateTime date;
+    @Column(length = 2000)
+    private String bio;
 
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
