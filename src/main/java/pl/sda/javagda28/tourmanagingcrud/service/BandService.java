@@ -32,8 +32,16 @@ public class BandService {
     public void createBand(final BandForm bandForm) {
         List<Event> byIdIn = eventRepository.findByIdIn(bandForm.getEventIds());
 
-        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), byIdIn);
+        String youTubeLink = bandForm.getYouTubeLink();
+        String[] split = youTubeLink.split("=");
+        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), split[1], byIdIn);
         bandRepository.save(band);
+    }
+
+    private String getActualValueOfYouTubeLink(final BandForm bandForm) {
+        String youTubeLink = bandForm.getYouTubeLink();
+        String[] splitLink = youTubeLink.split("=");
+        return splitLink[1];
     }
 
     public void removeBand(final Long id) {
@@ -53,6 +61,7 @@ public class BandService {
         bandFromDB.setMusicGenre(bandForm.getMusicGenre());
         bandFromDB.setMembers(bandForm.getMembers());
         bandFromDB.setBio(bandForm.getBio());
+        bandFromDB.setYouTubeLink(bandForm.getYouTubeLink());
         bandFromDB.setEvents(eventRepository.findByIdIn(bandForm.getEventIds()));
 
         return bandFromDB;
@@ -69,7 +78,7 @@ public class BandService {
                 .collect(Collectors.toList());
 
         return bandForm.builder().name(band.getName()).musicGenre(band.getMusicGenre())
-                .members(band.getMembers()).bio(band.getBio()).eventIds(eventIds).build();
+                .members(band.getMembers()).bio(band.getBio()).youTubeLink(band.getYouTubeLink()).eventIds(eventIds).build();
     }
 
     public Band findBandById(final Long id){
@@ -77,6 +86,7 @@ public class BandService {
                 .orElseThrow(()-> new TourManagingException("couldn't find specific band"));
         return band;
     }
+
 
 
 }

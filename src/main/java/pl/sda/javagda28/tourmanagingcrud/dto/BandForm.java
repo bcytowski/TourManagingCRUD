@@ -26,5 +26,7 @@ public class BandForm {
 
     public String bio;
 
+    public String youTubeLink;
+
     List<Long> eventIds = new ArrayList<>();
 }

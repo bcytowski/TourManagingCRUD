@@ -32,6 +32,8 @@ public class Band {
     @Column(length = 2000)
     private String bio;
 
+    private String youTubeLink;
+
     @ToString.Exclude
     @ManyToMany(mappedBy = "bands")
     private List<Event> events;
