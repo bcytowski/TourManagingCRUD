@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.dto.VenueForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
