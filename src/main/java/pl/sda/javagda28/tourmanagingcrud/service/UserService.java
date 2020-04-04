@@ -20,7 +20,7 @@ public class UserService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -51,12 +51,23 @@ public class UserService {
         }
     }
 
+    public UserForm createUserFormById(final Long id){
+        User user = findSpecificUserById(id);
+
+        return userMapper.userToUserForm(user);
+    }
+
     public void updateUser(final UserForm userForm, final Long id) {
-        final User user = userRepository.findById(id)
-                .orElseThrow(() -> new TourManagingException("Cannot update non existing user"));
+        User user = findSpecificUserById(id);
         user.setUsername(userForm.getUsername());
         user.setEmail(userForm.getEmail());
         user.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(user);
+    }
+
+    public User findSpecificUserById(final Long id){
+        final User user = userRepository.findById(id)
+                .orElseThrow(() -> new TourManagingException("Cannot update non existing user"));
+        return user;
     }
 }

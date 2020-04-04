@@ -11,14 +11,18 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-  private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-  public UserMapper(final PasswordEncoder passwordEncoder) {
-    this.passwordEncoder = passwordEncoder;
-  }
+    public UserMapper(final PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
-  public User userFormToUser(final UserForm userForm) {
-    return new User(null, userForm.getUsername(), userForm.getEmail(),
-        passwordEncoder.encode(userForm.getPassword()), List.of(), List.of());
-  }
+    public User userFormToUser(final UserForm userForm) {
+        return new User(null, userForm.getUsername(), userForm.getEmail(),
+                passwordEncoder.encode(userForm.getPassword()), List.of(), List.of());
+    }
+
+    public UserForm userToUserForm(final User user) {
+        return new UserForm(user.getUsername(), user.getEmail(), null, null,  user.getRoles() );
+    }
 }

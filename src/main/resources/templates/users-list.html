@@ -36,6 +36,12 @@
                 <button type="submit" class="btn btn-primary btn-sm">Remove</button>
             </form>
         </td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <form method="get" th:each="role :${us.getRoles()}" th:if="${!role.name.equals('ROLE_ADMIN')}"
+                  th:action="@{/users/edit/__${us.getId()}__}">
+                <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+            </form>
+        </td>
 
     </tr>
 </table>

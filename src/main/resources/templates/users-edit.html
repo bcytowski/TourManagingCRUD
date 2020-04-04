@@ -13,9 +13,9 @@
 <body>
 <th:block th:replace="navigation-bar :: navigator"/>
 <div class="user-form">
-  <form method="post" th:object="${userForm}" th:action="@{/users/__${userForm.username}__/edit}">
+  <form method="post" th:object="${userForm}" th:action="@{/users/edit/__${user.id}__}">
     <label for="username">Username</label>
-    <input id="username" readonly th:field="*{username}" th:value="*{username}"/>
+    <input id="username" th:field="*{username}" th:value="*{username}"/>
 
     <label for="email">Email</label>
     <input id="email" th:field="*{email}"/>
@@ -26,7 +26,7 @@
     <label for="passwordConfirmation">Confirm Password</label>
     <input id="passwordConfirmation" type="password" th:field="*{confirmPassword}"/>
 
-    <button type="submit">Create User</button>
+    <button type="submit">Update user</button>
   </form>
 </div>
 

@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
-
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.service.BandService;
 import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
@@ -46,12 +49,14 @@ public class EventController {
 
         return EVENT_LIST_TEMPLATE_PATH;
     }
+
     @GetMapping("/{id}")
     public String viewSpecificEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
         Event eventById = eventService.findEventById(id);
         modelMap.addAttribute(EVENT_MODEL_ATTRIBUTE, eventById);
         return EVENT_INFO_TEMPLATE_PATH;
     }
+
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/add")
     public String viewEventForm(final ModelMap modelMap) {
@@ -66,18 +71,21 @@ public class EventController {
 
         return EVENT_FORM_TEMPLATE_PATH;
     }
+
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/add")
     public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, final ModelMap modelMap) {
         eventService.createEvent(eventForm);
         return "redirect:/events";
     }
+
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/remove/{id}")
     public String removeEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
         eventService.removeEvent(id);
         return "redirect:/events";
     }
+
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/edit/{id}")
     public String viewEditForm(@PathVariable("id") final Long id, final ModelMap modelMap) {

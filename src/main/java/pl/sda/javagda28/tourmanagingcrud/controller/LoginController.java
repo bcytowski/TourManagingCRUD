@@ -7,10 +7,10 @@ import pl.sda.javagda28.tourmanagingcrud.dto.UserForm;
 
 
 @Controller
-public class LoginController  {
+public class LoginController {
 
     @GetMapping("/login")
-    public String viewLoginPage(final ModelMap modelMap){
+    public String viewLoginPage(final ModelMap modelMap) {
         modelMap.addAttribute("userForm", new UserForm());
         return "login";
     }

@@ -46,6 +46,7 @@ public class VenueController {
         modelMap.addAttribute(MODEL_VENUES_ATTRIBUTE, allVenues);
         return VENUE_LIST_PATH;
     }
+
     @GetMapping("/{id}")
     public String viewSpecificVenue(@PathVariable("id") final Long id, final ModelMap modelMap) {
         Venue venueById = venueService.findVenueById(id);
@@ -93,7 +94,7 @@ public class VenueController {
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/edit/{id}")
     public String editVenue(@PathVariable final Long id,
-                            @Valid @ModelAttribute final ModelMap modelMap, final VenueForm venueForm){
+                            @Valid @ModelAttribute final ModelMap modelMap, final VenueForm venueForm) {
         venueService.updateVenue(id, venueForm);
         return "redirect:/venues"; //displayVenues(modelMap);
     }

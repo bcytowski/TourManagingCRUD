@@ -32,9 +32,8 @@ public class BandService {
     public void createBand(final BandForm bandForm) {
         List<Event> byIdIn = eventRepository.findByIdIn(bandForm.getEventIds());
 
-        String youTubeLink = bandForm.getYouTubeLink();
-        String[] split = youTubeLink.split("=");
-        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), split[1], byIdIn);
+        String actualValueOfYouTubeLink = getActualValueOfYouTubeLink(bandForm);
+        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), actualValueOfYouTubeLink, byIdIn);
         bandRepository.save(band);
     }
 
@@ -57,11 +56,13 @@ public class BandService {
     }
 
     private Band copyValuesFromFormToBand(final BandForm bandForm, final Band bandFromDB) {
+        String actualValueOfYouTubeLink = getActualValueOfYouTubeLink(bandForm);
+
         bandFromDB.setName(bandForm.getName());
         bandFromDB.setMusicGenre(bandForm.getMusicGenre());
         bandFromDB.setMembers(bandForm.getMembers());
         bandFromDB.setBio(bandForm.getBio());
-        bandFromDB.setYouTubeLink(bandForm.getYouTubeLink());
+        bandFromDB.setYouTubeLink(actualValueOfYouTubeLink);
         bandFromDB.setEvents(eventRepository.findByIdIn(bandForm.getEventIds()));
 
         return bandFromDB;
@@ -70,6 +71,9 @@ public class BandService {
         final Band band = bandRepository.findById(id)
                 .orElseThrow(()-> new TourManagingException("couldn't find specific band"));
 
+        String valueOfYouTubeLink = band.getYouTubeLink();
+        String youTubeLinkWithoutValue = "https://www.youtube.com/watch?v=";
+        String actualYouTubeLink = youTubeLinkWithoutValue.concat(valueOfYouTubeLink);
 
         BandForm bandForm = new BandForm();
 
@@ -78,7 +82,7 @@ public class BandService {
                 .collect(Collectors.toList());
 
         return bandForm.builder().name(band.getName()).musicGenre(band.getMusicGenre())
-                .members(band.getMembers()).bio(band.getBio()).youTubeLink(band.getYouTubeLink()).eventIds(eventIds).build();
+                .members(band.getMembers()).bio(band.getBio()).youTubeLink(actualYouTubeLink).eventIds(eventIds).build();
     }
 
     public Band findBandById(final Long id){

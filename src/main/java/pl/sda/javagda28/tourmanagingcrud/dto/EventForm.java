@@ -29,6 +29,6 @@ public class EventForm {
 
     private String bio;
 
-    private List<Long> bandIds = new ArrayList<Long>();
+    private List<Long> bandIds = new ArrayList<>();
 
 }
