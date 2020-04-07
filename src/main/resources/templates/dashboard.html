@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <script src="../webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}" media="screen"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8a41f39855.js" crossorigin="anonymous"></script>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<th:block th:fragment="admin-navigator">
+<nav class="navbar navbar-expand-md navbar-light">
+    <button class="navbar-toggler ml-auto mb-2 bg-light"
+            type="button" data-toggle="collapse"
+            data-target="#myNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <!--sidebar-->
+                <div class="col-xl-2 col-lg-3 col-md-4 sidebar fixed-top">
+                    <a th:href="@{/}" class="navbar-brand text-white d-block
+                    mx-auto text-center py-3 mb-4 bottom-border text-uppercase">Tour Manager</a>
+
+                    <div class="bottom-border pb-3">
+                        <img src="../img/bart.jpg" width="45" class="rounded-circle mr-2">
+                        <a href="#" class="text-white">Bartłomiej Cytowski</a>
+                    </div>
+                    <ul class="navbar-nav flex-column mt-4">
+                        <li class="nav-item"><a href="#" class="nav-link
+                        text-white p-3 mb-2 current"><i class="fas fa-home text-light
+                        fa-lg mr-3"></i>Dashboard</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-user text-light
+                        fa-lg mr-3"></i>Profile</a></li>
+                        <li class="nav-item"><a th:href="@{/users}" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-user-friends text-light
+                        fa-lg mr-3"></i>Manage Users</a></li>
+                        <li class="nav-item"><a th:href="@{/events}" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-calendar-alt text-light
+                        fa-lg mr-3"></i>Manage Events</a></li>
+                        <li class="nav-item"><a th:href="@{/bands}" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-drum text-light
+                        fa-lg mr-3"></i>Manage Bands</a></li>
+                        <li class="nav-item"><a th:href="@{/venues}" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-city text-light
+                        fa-lg mr-3"></i>Manage Venues</a></li>
+                        <li class="nav-item"><a th:href="@{/logout}" class="nav-link
+                        text-white p-3 mb-2 sidebar-link"><i class="fas fa-sign-out-alt text-light
+                        fa-lg mr-3"></i>Logout</a></li>
+                    </ul>
+                </div>
+                <!--end of sidebar-->
+                <!--top nav-->
+                <div class="col-xl-10 col-lg-9 col-md-8 ml-auto bg-dark fixed-top py-2">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <h4 class="text-light text-uppercase mb-0">dashboard</h4>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="navbar-nav">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

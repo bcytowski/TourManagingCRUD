@@ -1,13 +1,21 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@RequestMapping("/")
 public class IndexController {
 
-    public String getIndexPage() {
-        return "index";
+
+    @GetMapping("/")
+    public String viewIndexPage() {
+        return "startup-page";
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/dashboard")
+    public String viewDashboard(){
+        return "dashboard";
     }
 }
