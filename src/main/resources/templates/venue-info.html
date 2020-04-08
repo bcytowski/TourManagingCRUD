@@ -19,11 +19,14 @@
 <article>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 bg-white text-body wpis">
+            <div class="col-lg-8 bg-white text-body info">
                 <header>
                     <h1 th:text="${venue.name}" class="h2 font-weight-bold text-uppercase ml-0 mb-4"></h1>
                 </header>
                 <p th:text="${venue.bio}"></p>
+            </div>
+            <div class="col-lg-4">
+                <img width="600"  class="img-fluid" th:src="*{'data:image/jpg;base64,'+ base64EncodedImage}" />
             </div>
         </div>
     </div>
@@ -33,6 +36,7 @@
         <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Back to the index page</button>
     </form>
 </div>
+
 
 </body>
 </html>

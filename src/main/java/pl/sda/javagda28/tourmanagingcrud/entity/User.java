@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import java.util.List;
@@ -24,14 +25,14 @@ public class User {
     @GeneratedValue
     private Long id;
 
-
     private String username;
-
 
     private String email;
 
-
     private String password;
+
+    @Lob
+    private byte[] userImage;
 
     @Transient
     private List<Role> nonAssignedRoles;

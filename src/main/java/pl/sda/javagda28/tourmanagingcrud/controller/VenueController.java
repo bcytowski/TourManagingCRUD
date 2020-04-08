@@ -1,6 +1,7 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,6 +51,8 @@ public class VenueController {
     @GetMapping("/{id}")
     public String viewSpecificVenue(@PathVariable("id") final Long id, final ModelMap modelMap) {
         Venue venueById = venueService.findVenueById(id);
+        String base64EncodedImage = Base64.encodeBase64String(venueById.getVenueImage());
+        modelMap.addAttribute("base64EncodedImage", base64EncodedImage);
         modelMap.addAttribute(VENUE_MODEL_ATTRIBUTE, venueById);
         return VENUE_INFO_TEMPLATE_PATH;
     }

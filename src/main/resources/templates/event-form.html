@@ -13,10 +13,10 @@
     <script src="https://kit.fontawesome.com/8a41f39855.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <th:block th:replace="navigation-bar :: navigator"/>
+<th:block th:replace="navigation-bar :: navigator"/>
 
 <div class="event-form">
-    <form method="post" th:object="${eventForm}" th:action="@{/events/__${method}__}">
+    <form method="post" th:object="${eventForm}" enctype="multipart/form-data" th:action="@{/events/__${method}__}">
         <label for="name">Event name</label>
         <input id="name" th:field="*{name}"/>
 
@@ -35,6 +35,13 @@
             <option th:each="band: ${bands}"
                     th:value="${band.getId()}" th:text="${band.getName()}">
         </select>
+
+        <div class="col-sm-9">
+            <label class="custom-file-label" for="file">Event Photo</label>
+            <input type="file" id="file" name="file" class="custom-file-input"/>
+
+            <span class="custom-file-control"></span>
+        </div>
 
 
         <button type="submit">SUBMIT</button>

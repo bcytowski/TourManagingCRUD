@@ -17,7 +17,7 @@
 <div class="hero">
     <div class="form-box">
 
-    <form method="post" th:object="${bandForm}" th:action="@{/bands/__${method}__}" class="input-group">
+    <form method="post" th:object="${bandForm}" enctype="multipart/form-data" th:action="@{/bands/__${method}__}" class="input-group">
         <input type="text" name="bandName" class="input-field"
                placeholder="Band Name" required th:field="*{name}">
 
@@ -33,6 +33,13 @@
         <input type="text" name="youTubeLink" class="input-field"
                placeholder="You Tube Link" th:field="*{youTubeLink}">
 
+
+        <div class="col-sm-9">
+            <label class="custom-file-label" for="file">Band photo</label>
+            <input type="file" id="file" name="file" class="custom-file-input"/>
+
+            <span class="custom-file-control"></span>
+        </div>
 
 
         <button class="submit-btn" type="submit">SUBMIT</button>

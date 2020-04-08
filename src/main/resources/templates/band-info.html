@@ -20,19 +20,26 @@
 <article>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 col-lg-7 bg-white text-body wpis">
+            <div class="col-sm-12 col-lg-7 bg-white text-body info">
+
                 <header>
+                    <div class="col-lg-8">
+                        <img width="1000"  class="img-fluid" th:src="*{'data:image/jpg;base64,'+ base64EncodedImage}" />
+                    </div>
+
                     <h1 th:text="${band.name}" class="h2 font-weight-bold text-uppercase ml-0 mb-4"></h1>
                 </header>
                 <p th:text="${band.bio}"></p>
 
 
             </div>
-            <div class="col-lg-4 ytplayer">
+            <div class="col-lg-4 yt-player">
                 <iframe width="560" height="315" th:src="@{https://www.youtube.com/embed/{url} (url=${band.getYouTubeLink()})}" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
+
             </div>
+
 
 
         </div>

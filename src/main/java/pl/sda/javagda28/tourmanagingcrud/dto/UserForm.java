@@ -32,6 +32,8 @@ public class UserForm {
   private String password;
   private String confirmPassword;
 
+  private byte[] userImage;
+
   @AssertTrue
   public boolean isPasswordPairValid() {
     return nonNull(password) && nonNull(confirmPassword) && password.equals(confirmPassword);

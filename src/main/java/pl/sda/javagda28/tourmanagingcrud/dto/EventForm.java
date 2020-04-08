@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class EventForm {
     private Long venueId;
 
     private String bio;
+
+    private byte[] eventPhoto;
 
     private List<Long> bandIds = new ArrayList<>();
 

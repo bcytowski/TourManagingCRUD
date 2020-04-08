@@ -24,6 +24,8 @@ public class VenueForm {
 
     private String bio;
 
+    private byte[] venueImage;
+
     List<Long> eventIds = new ArrayList<>();
 
 }

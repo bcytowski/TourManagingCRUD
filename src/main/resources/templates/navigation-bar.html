@@ -15,7 +15,7 @@
 <body>
 
 <th:block th:fragment="navigator">
-    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+    <nav class="navbar navbar-dark navbar-expand-md navigation">
         <a class="navbar-brand" th:href="@{/}"><img src="../img/guitaricon.png" width="30" height="30"
                                                     class="d-inline-block mr-1 align-bottom"></a>
 
@@ -31,16 +31,10 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/events}">EVENTS</a>
                 </li>
-                <li class="nav-item dropdown ">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"
-                    id="submenu" aria-haspopup="true">BANDS</a>
-                    <div class="dropdown-menu" aria-labelledby="submenu">
-
-                        <a class="dropdown-item" th:href="@{/bands/add}">REGISTER YOUR BAND</a>
-                        <a class="dropdown-item" th:href="@{/bands}">BANDS LIST</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/bands}">BANDS</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/venues}">VENUES</a>
                 </li>
 
@@ -54,6 +48,9 @@
                 </li>
                 <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
                     <a class="nav-link" th:href="@{/login}">LOGIN</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
+                    <a class="nav-link" th:href="@{/users/add}">REGISTER</a>
                 </li>
                 <li class="nav-item" sec:authorize="isFullyAuthenticated()">
                     <a class="nav-link" th:href="@{/logout}">LOGOUT</a>
