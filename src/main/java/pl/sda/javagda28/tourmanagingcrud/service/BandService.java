@@ -4,17 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.dto.BandForm;
-import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
-import pl.sda.javagda28.tourmanagingcrud.dto.VenueForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +29,7 @@ public class BandService {
         List<Event> byIdIn = eventRepository.findByIdIn(bandForm.getEventIds());
 
         String actualValueOfYouTubeLink = getActualValueOfYouTubeLink(bandForm);
-        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), actualValueOfYouTubeLink, byIdIn);
+        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), actualValueOfYouTubeLink, bandForm.getBandPhoto(), byIdIn);
         bandRepository.save(band);
     }
 
@@ -63,6 +59,7 @@ public class BandService {
         bandFromDB.setMembers(bandForm.getMembers());
         bandFromDB.setBio(bandForm.getBio());
         bandFromDB.setYouTubeLink(actualValueOfYouTubeLink);
+        bandFromDB.setBandPhoto(bandForm.getBandPhoto());
         bandFromDB.setEvents(eventRepository.findByIdIn(bandForm.getEventIds()));
 
         return bandFromDB;
@@ -82,7 +79,7 @@ public class BandService {
                 .collect(Collectors.toList());
 
         return bandForm.builder().name(band.getName()).musicGenre(band.getMusicGenre())
-                .members(band.getMembers()).bio(band.getBio()).youTubeLink(actualYouTubeLink).eventIds(eventIds).build();
+                .members(band.getMembers()).bio(band.getBio()).youTubeLink(actualYouTubeLink).bandPhoto(band.getBandPhoto()).eventIds(eventIds).build();
     }
 
     public Band findBandById(final Long id){

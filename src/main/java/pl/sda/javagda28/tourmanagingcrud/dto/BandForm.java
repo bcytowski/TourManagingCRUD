@@ -15,18 +15,20 @@ import java.util.List;
 @Builder
 public class BandForm {
     @NotNull
-    public String name;
+    private String name;
 
     @NotNull
-    public String musicGenre;
+    private String musicGenre;
 
     @NotNull
-    public Long members;
+    private Long members;
 
 
-    public String bio;
+    private String bio;
 
-    public String youTubeLink;
+    private String youTubeLink;
 
-    List<Long> eventIds = new ArrayList<>();
+    private byte[] bandPhoto;
+
+    private List<Long> eventIds = new ArrayList<>();
 }

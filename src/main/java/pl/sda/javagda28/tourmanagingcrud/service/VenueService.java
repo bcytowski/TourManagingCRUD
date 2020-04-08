@@ -30,7 +30,7 @@ public class VenueService {
 
         List<Event> byIdIn = eventRepository.findByIdIn(venueForm.getEventIds());
 
-        Venue venue = new Venue(null, venueForm.getName(), venueForm.getAddress(), venueForm.getBio() , byIdIn);
+        Venue venue = new Venue(null, venueForm.getName(), venueForm.getAddress(), venueForm.getBio() , venueForm.getVenueImage() ,byIdIn);
 
         return venueRepository.save(venue);
     }
@@ -56,6 +56,7 @@ public class VenueService {
         venueFromDB.setName(venueForm.getName());
         venueFromDB.setAddress(venueForm.getAddress());
         venueFromDB.setBio(venueForm.getBio());
+        venueFromDB.setVenueImage(venueForm.getVenueImage());
         venueFromDB.setEvents(eventRepository.findByIdIn(venueForm.getEventIds()));
 
         return venueFromDB;
@@ -73,7 +74,7 @@ public class VenueService {
                 .collect(Collectors.toList());
 
         return venueForm.builder().name(venue.getName())
-                .address(venue.getAddress()).bio(venue.getBio()).eventIds(eventIds).build();
+                .address(venue.getAddress()).bio(venue.getBio()).venueImage(venue.getVenueImage()).eventIds(eventIds).build();
     }
 
     public Venue findVenueById(final Long id) {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
@@ -31,8 +33,12 @@ public class Event {
     private String name;
 
     private LocalDateTime date;
+
     @Column(length = 2000)
     private String bio;
+
+    @Lob
+    private byte [] eventPhoto;
 
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

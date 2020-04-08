@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class Band {
     private String bio;
 
     private String youTubeLink;
+
+    @Lob
+    private byte [] bandPhoto;
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "bands")

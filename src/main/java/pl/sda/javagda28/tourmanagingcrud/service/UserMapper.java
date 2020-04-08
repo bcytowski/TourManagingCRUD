@@ -19,10 +19,10 @@ public class UserMapper {
 
     public User userFormToUser(final UserForm userForm) {
         return new User(null, userForm.getUsername(), userForm.getEmail(),
-                passwordEncoder.encode(userForm.getPassword()), List.of(), List.of());
+                passwordEncoder.encode(userForm.getPassword()), userForm.getUserImage(),List.of(), List.of());
     }
 
     public UserForm userToUserForm(final User user) {
-        return new UserForm(user.getUsername(), user.getEmail(), null, null,  user.getRoles() );
+        return new UserForm(user.getUsername(), user.getEmail(), null, null, user.getUserImage() , user.getRoles() );
     }
 }

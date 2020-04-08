@@ -1,14 +1,19 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
@@ -18,6 +23,7 @@ import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -53,7 +59,9 @@ public class EventController {
     @GetMapping("/{id}")
     public String viewSpecificEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
         Event eventById = eventService.findEventById(id);
+        String base64EncodedImage = Base64.encodeBase64String(eventById.getEventPhoto());
         modelMap.addAttribute(EVENT_MODEL_ATTRIBUTE, eventById);
+        modelMap.addAttribute("base64EncodedImage", base64EncodedImage);
         return EVENT_INFO_TEMPLATE_PATH;
     }
 
@@ -74,7 +82,9 @@ public class EventController {
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/add")
-    public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, final ModelMap modelMap) {
+    public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, @RequestParam("file") MultipartFile file) throws IOException {
+        byte[] eventPhoto = file.getBytes();
+        eventForm.setEventPhoto(eventPhoto);
         eventService.createEvent(eventForm);
         return "redirect:/events";
     }

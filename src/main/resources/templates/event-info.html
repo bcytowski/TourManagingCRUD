@@ -25,6 +25,9 @@
                 </header>
                 <p th:text="${event.bio}"></p>
             </div>
+            <div class="col-lg-4">
+                <img width="600"  class="img-fluid" th:src="*{'data:image/jpg;base64,'+ base64EncodedImage}" />
+            </div>
         </div>
     </div>
 </article>

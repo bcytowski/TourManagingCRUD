@@ -62,6 +62,7 @@ public class UserService {
         user.setUsername(userForm.getUsername());
         user.setEmail(userForm.getEmail());
         user.setPassword(passwordEncoder.encode(userForm.getPassword()));
+        user.setUserImage(userForm.getUserImage());
         userRepository.save(user);
     }
 

@@ -1,6 +1,7 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import pl.sda.javagda28.tourmanagingcrud.dto.BandForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
@@ -16,6 +19,7 @@ import pl.sda.javagda28.tourmanagingcrud.service.BandService;
 import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -50,7 +54,9 @@ public class BandController {
     @GetMapping("/{id}")
     public String viewSpecificBand(@PathVariable("id") final Long id, final ModelMap modelMap) {
         Band bandById = bandService.findBandById(id);
+        String base64EncodedImage = Base64.encodeBase64String(bandById.getBandPhoto());
         modelMap.addAttribute(BAND_MODEL_ATTRIBUTE, bandById);
+        modelMap.addAttribute("base64EncodedImage", base64EncodedImage);
         return BAND_INFO_TEMPLATE_PATH;
     }
 
@@ -67,7 +73,9 @@ public class BandController {
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER", "ROLE-BAND"})
     @PostMapping("/add")
-    public String createVenue(@Valid @ModelAttribute final BandForm bandForm, final ModelMap modelMap) {
+    public String createVenue(@Valid @ModelAttribute final BandForm bandForm, @RequestParam("file") MultipartFile file) throws IOException {
+        byte[] imageFromForm = file.getBytes();
+        bandForm.setBandPhoto(imageFromForm);
         bandService.createBand(bandForm);
         return "redirect:/bands";
     }
