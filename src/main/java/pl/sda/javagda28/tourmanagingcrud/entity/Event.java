@@ -1,11 +1,10 @@
 package pl.sda.javagda28.tourmanagingcrud.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,6 +24,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Event {
     @Id
     @GeneratedValue
@@ -38,18 +38,18 @@ public class Event {
     private String bio;
 
     @Lob
-    private byte [] eventPhoto;
+    private byte[] eventPhoto;
 
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Bands_Events",
-            joinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "band_id", referencedColumnName = "id") }
+            joinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "band_id", referencedColumnName = "id")}
     )
     private List<Band> bands;
     @ToString.Exclude
-    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "venue_id", nullable = true)
     private Venue venue;
 }

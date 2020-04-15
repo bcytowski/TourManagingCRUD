@@ -1,11 +1,10 @@
 package pl.sda.javagda28.tourmanagingcrud.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,10 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "venues")
+@Builder
 public class Venue {
     @Id
     @GeneratedValue
