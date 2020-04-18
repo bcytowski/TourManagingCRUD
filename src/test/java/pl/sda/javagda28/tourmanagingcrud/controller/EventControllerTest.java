@@ -1,19 +1,19 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 
-import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,6 +29,8 @@ import pl.sda.javagda28.tourmanagingcrud.service.AppUserDetailsService;
 import pl.sda.javagda28.tourmanagingcrud.service.BandService;
 import pl.sda.javagda28.tourmanagingcrud.service.EventService;
 import pl.sda.javagda28.tourmanagingcrud.service.VenueService;
+import pl.sda.javagda28.tourmanagingcrud.testdata.EventTestDataProvider;
+import pl.sda.javagda28.tourmanagingcrud.testdata.VenueTestDataProvider;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,10 +43,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventController.class)
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
 class EventControllerTest {
+
+
+    private Event event1;
+    private Event event2;
+    private Venue venue1;
+    private Venue venue2;
+    private List<Event> events;
+
 
     @MockBean
     EventService eventService;
@@ -68,18 +78,37 @@ class EventControllerTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
+    public void init() {
+        venue1 = VenueTestDataProvider.getVenue();
+        venue2 = VenueTestDataProvider.getVenue();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
+        event1 = EventTestDataProvider.getEventBuilder()
+                .venue(venue1)
+                .build();
+
+        event2 = EventTestDataProvider.getEventBuilder()
+                .venue(venue2)
+                .build();
+
+        events = new ArrayList<>();
+        events.add(event1);
+        events.add(event2);
+
+
     }
+
+//    @Before
+//    public void setup() {
+//        MockitoAnnotations.initMocks(this);
+//
+//        mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
+//    }
 
     @Test
     void displaySpecificEventTest() throws Exception {
-        Event event = new Event();
-        event.setId(1L);
 
-        when(eventService.findEventById(1L)).thenReturn(event);
+
+        when(eventService.findEventById(1L)).thenReturn(event1);
 
         mockMvc.perform(get("/events/{id}", 1L))
                 .andExpect(status().isOk())
@@ -88,17 +117,17 @@ class EventControllerTest {
 
     @Test
     void displayEventsTest() throws Exception {
-        List<Event> events = new ArrayList<>();
-        Venue venue1 = new Venue();
-        venue1.setName("ven1");
-        Venue venue2 = new Venue();
-        venue2.setName("ven2");
-        Event event1 = new Event();
-        Event event2 = new Event();
-        event1.setVenue(venue1);
-        event2.setVenue(venue2);
-        events.add(event1);
-        events.add(event2);
+//        List<Event> events = new ArrayList<>();
+//        Venue venue1 = new Venue();
+//        venue1.setName("ven1");
+//        Venue venue2 = new Venue();
+//        venue2.setName("ven2");
+//        Event event1 = new Event();
+//        Event event2 = new Event();
+//        event1.setVenue(venue1);
+//        event2.setVenue(venue2);
+//        events.add(event1);
+//        events.add(event2);
 
 
         when(eventService.getAllEvents()).thenReturn(events);
@@ -162,7 +191,7 @@ class EventControllerTest {
         List<Long> bandIds = List.of(1L, 2L);
 
         byte[] bytes = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/sonisphere.jpg"));
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("multipart","sonisphere" , "text/plain" , bytes);
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("multipart", "sonisphere", "text/plain", bytes);
 
         EventForm evForm1 = new EventForm("name", String.valueOf(LocalDateTime.now()), ven1.getId(), "lolo", bytes, bandIds);
 
@@ -192,7 +221,11 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN", password = "admin", value = "admin")
     void viewEditFormTestWithAdminRoleGranted() throws Exception {
+
+
         Event event = new Event();
+
+
         event.setId(1L);
 
         EventForm eventForm = new EventForm();
@@ -207,7 +240,7 @@ class EventControllerTest {
         Band band2 = new Band();
         band1.setId(2L);
         band2.setId(3L);
-        List <Long> bandIds = List.of(2L, 3L);
+        List<Long> bandIds = List.of(2L, 3L);
         eventForm.setBandIds(bandIds);
 
         when(eventService.findEventById(1L)).thenReturn(event);
