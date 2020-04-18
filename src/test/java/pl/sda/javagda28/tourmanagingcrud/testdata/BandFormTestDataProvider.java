@@ -8,7 +8,9 @@ public class BandFormTestDataProvider {
         return BandForm.builder()
                 .name("testBand")
                 .members(4L)
+                .musicGenre("testGenre")
                 .bio("testBio")
+                .youTubeLink("https://www.youtube.com/watch?v=x9hZFyoqp7Q")
                 .build();
     }
 
@@ -16,7 +18,9 @@ public class BandFormTestDataProvider {
         return BandForm.builder()
                 .name("testBand")
                 .members(4L)
-                .bio("testBio");
+                .musicGenre("testGenre")
+                .bio("testBio")
+                .youTubeLink("https://www.youtube.com/watch?v=x9hZFyoqp7Q");
     }
 
 }
