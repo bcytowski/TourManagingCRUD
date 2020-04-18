@@ -1,14 +1,15 @@
 package pl.sda.javagda28.tourmanagingcrud.controller;
 
 
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
+
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,11 +17,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
@@ -45,15 +44,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(EventController.class)
 @RunWith(MockitoJUnitRunner.class)
 @AutoConfigureMockMvc
-@RequiredArgsConstructor
 class EventControllerTest {
 
 
-    private Event event1;
-    private Event event2;
-    private Venue venue1;
-    private Venue venue2;
-    private List<Event> events;
+    private static Event event1;
+    private static Event event2;
+    private static Venue venue1;
+    private static Venue venue2;
+    private static List<Event> events;
 
 
     @MockBean
@@ -77,8 +75,8 @@ class EventControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Before
-    public void init() {
+    @BeforeAll
+    public static void init() {
         venue1 = VenueTestDataProvider.getVenue();
         venue2 = VenueTestDataProvider.getVenue();
 
@@ -97,16 +95,9 @@ class EventControllerTest {
 
     }
 
-//    @Before
-//    public void setup() {
-//        MockitoAnnotations.initMocks(this);
-//
-//        mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
-//    }
 
     @Test
     void displaySpecificEventTest() throws Exception {
-
 
         when(eventService.findEventById(1L)).thenReturn(event1);
 
@@ -117,18 +108,6 @@ class EventControllerTest {
 
     @Test
     void displayEventsTest() throws Exception {
-//        List<Event> events = new ArrayList<>();
-//        Venue venue1 = new Venue();
-//        venue1.setName("ven1");
-//        Venue venue2 = new Venue();
-//        venue2.setName("ven2");
-//        Event event1 = new Event();
-//        Event event2 = new Event();
-//        event1.setVenue(venue1);
-//        event2.setVenue(venue2);
-//        events.add(event1);
-//        events.add(event2);
-
 
         when(eventService.getAllEvents()).thenReturn(events);
 
@@ -157,8 +136,6 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN", password = "admin", value = "admin")
     void deleteEventTestWithAdminRoleGranted() throws Exception {
-        Event event = new Event();
-        event.setId(1L);
 
         mockMvc.perform(post("/events/remove/{id}", 1L))
                 .andExpect(status().is3xxRedirection())
@@ -168,8 +145,6 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "band", roles = "BAND", password = "band", value = "band")
     void deleteEventTestWithBandRoleGranted() throws Exception {
-        Event event = new Event();
-        event.setId(1L);
 
         mockMvc.perform(post("/events/remove/{id}", 1L))
                 .andExpect(status().isForbidden());
