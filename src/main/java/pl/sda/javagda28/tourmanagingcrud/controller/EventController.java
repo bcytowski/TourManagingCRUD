@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,7 +66,7 @@ public class EventController {
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @GetMapping("/add")
-    public String viewEventForm(final ModelMap modelMap) {
+    public String displayEventForm(final ModelMap modelMap) {
         List<Event> events = eventService.getAllEvents();
         List<Venue> venues = venueService.getAllVenues();
         List<Band> bands = bandService.getAllBands();
@@ -81,8 +80,12 @@ public class EventController {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
-    @PostMapping("/add")
-    public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, @RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping(value = "/add")
+    public String saveEvent(@Valid @ModelAttribute final EventForm eventForm, BindingResult bindingResult, @RequestParam("file") MultipartFile file) throws IOException {
+        if(bindingResult.hasErrors()){
+            System.out.println("error occurred in event form");
+            return EVENT_FORM_TEMPLATE_PATH;
+        }
         byte[] eventPhoto = file.getBytes();
         eventForm.setEventPhoto(eventPhoto);
         eventService.createEvent(eventForm);
@@ -91,7 +94,7 @@ public class EventController {
 
     @Secured({"ROLE_ADMIN", "ROLE_ORGANISER"})
     @PostMapping("/remove/{id}")
-    public String removeEvent(@PathVariable("id") final Long id, final ModelMap modelMap) {
+    public String removeEvent(@PathVariable("id") final Long id) {
         eventService.removeEvent(id);
         return "redirect:/events";
     }
