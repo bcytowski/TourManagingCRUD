@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.dto.BandForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
-import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.RecordNotFoundException;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 
@@ -21,7 +21,7 @@ public class BandService {
     private final BandRepository bandRepository;
     private final EventRepository eventRepository;
 
-    public List<Band> getAllBands(){
+    public List<Band> getAllBands() {
         return bandRepository.findAll();
     }
 
@@ -29,7 +29,9 @@ public class BandService {
         List<Event> byIdIn = eventRepository.findByIdIn(bandForm.getEventIds());
 
         String actualValueOfYouTubeLink = getActualValueOfYouTubeLink(bandForm);
-        Band band = new Band (null, bandForm.getName(), bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(), actualValueOfYouTubeLink, bandForm.getBandPhoto(), byIdIn);
+        Band band = new Band(null, bandForm.getName(),
+                bandForm.getMusicGenre(), bandForm.getMembers(), bandForm.getBio(),
+                actualValueOfYouTubeLink, bandForm.getBandPhoto(), byIdIn);
         bandRepository.save(band);
     }
 
@@ -48,7 +50,7 @@ public class BandService {
                 .map(b -> copyValuesFromFormToBand(bandForm, b))
                 .orElseThrow(() -> new IllegalArgumentException(" "));
 
-       bandRepository.save(band);
+        bandRepository.save(band);
     }
 
     private Band copyValuesFromFormToBand(final BandForm bandForm, final Band bandFromDB) {
@@ -64,9 +66,10 @@ public class BandService {
 
         return bandFromDB;
     }
-    public BandForm createBandFormById (final Long id){
+
+    public BandForm createBandFormById(final Long id) {
         final Band band = bandRepository.findById(id)
-                .orElseThrow(()-> new TourManagingException("couldn't find specific band"));
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific band"));
 
         String valueOfYouTubeLink = band.getYouTubeLink();
         String youTubeLinkWithoutValue = "https://www.youtube.com/watch?v=";
@@ -82,12 +85,10 @@ public class BandService {
                 .members(band.getMembers()).bio(band.getBio()).youTubeLink(actualYouTubeLink).bandPhoto(band.getBandPhoto()).eventIds(eventIds).build();
     }
 
-    public Band findBandById(final Long id){
-       Band band = bandRepository.findById(id)
-                .orElseThrow(()-> new TourManagingException("couldn't find specific band"));
-        return band;
+    public Band findBandById(final Long id) {
+        return bandRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific band"));
     }
-
 
 
 }

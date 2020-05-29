@@ -6,12 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.dto.VenueForm;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.RecordNotFoundException;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.NotEmptyException;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,24 +30,25 @@ public class VenueService {
 
         List<Event> byIdIn = eventRepository.findByIdIn(venueForm.getEventIds());
 
-        Venue venue = new Venue(null, venueForm.getName(), venueForm.getAddress(), venueForm.getBio() , venueForm.getVenueImage() ,byIdIn);
+        Venue venue = new Venue(null, venueForm.getName(),
+                venueForm.getAddress(), venueForm.getBio(), venueForm.getVenueImage(), byIdIn);
 
         return venueRepository.save(venue);
     }
 
     public void removeVenue(final Long id) {
-        Venue byId = venueRepository.findById(id).orElseThrow(() -> new TourManagingException("couldnt find specific venue"));
+        Venue byId = venueRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("couldn't find specific venue"));
         if (byId.getEvents().size() == 0) {
             venueRepository.deleteById(id);
         } else {
-            throw new TourManagingException("venue is not empty");
+            throw new NotEmptyException("venue is not empty");
         }
     }
 
     public void updateVenue(final Long id, final VenueForm venueForm) {
         Venue venue = venueRepository.findById(id)
                 .map(ven -> copyValuesFromFormToVenue(venueForm, ven))
-                .orElseThrow(() -> new TourManagingException("couldn't find specific venue"));
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific venue"));
 
         venueRepository.save(venue);
     }
@@ -65,7 +66,7 @@ public class VenueService {
 
     public VenueForm createVenueFormById(final Long id) {
         Venue venue = venueRepository.findById(id)
-                .orElseThrow(() -> new TourManagingException("couldn't find specific venue"));
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific venue"));
 
         VenueForm venueForm = new VenueForm();
 
@@ -78,6 +79,6 @@ public class VenueService {
     }
 
     public Venue findVenueById(final Long id) {
-        return venueRepository.findById(id).orElseThrow(()->new TourManagingException("couldn't find specific venue"));
+        return venueRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("couldn't find specific venue"));
     }
 }

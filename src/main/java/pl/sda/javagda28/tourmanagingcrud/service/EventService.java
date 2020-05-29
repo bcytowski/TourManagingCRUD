@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
 import pl.sda.javagda28.tourmanagingcrud.entity.Event;
 import pl.sda.javagda28.tourmanagingcrud.entity.Venue;
-import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
 import pl.sda.javagda28.tourmanagingcrud.dto.EventForm;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.RecordNotFoundException;
 import pl.sda.javagda28.tourmanagingcrud.repository.BandRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.EventRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,11 +35,14 @@ public class EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eventDate = LocalDate.parse(eventForm.getDate(), formatter);
 
-        Venue venue = venueRepository.findById(eventForm.getVenueId()).orElseThrow(() -> new TourManagingException("couldnt find specific venue"));
+        Venue venue = venueRepository.findById(eventForm.getVenueId())
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific venue"));
         List<Band> bandsByIds = bandRepository.findByIdIn(eventForm.getBandIds());
 
 
-        Event event = new Event(null, eventForm.getName(), LocalDateTime.of(eventDate, LocalTime.of(20, 0)), eventForm.getBio(), eventForm.getEventPhoto() , bandsByIds, venue);
+        Event event = new Event(null, eventForm.getName(),
+                LocalDateTime.of(eventDate, LocalTime.of(20, 0))
+                , eventForm.getBio(), eventForm.getEventPhoto() , bandsByIds, venue);
         return eventRepository.save(event);
     }
 
@@ -76,7 +78,7 @@ public class EventService {
 
     public EventForm createEventFormById(final Long id) {
         final Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new TourManagingException("couldn't find specific event"));
+                .orElseThrow(() -> new RecordNotFoundException("couldn't find specific event"));
 
 
         EventForm eventForm = new EventForm();
@@ -92,6 +94,6 @@ public class EventService {
     }
 
     public Event findEventById(final Long id) {
-        return eventRepository.findById(id).orElseThrow(() -> new TourManagingException("couldn't find specific event"));
+        return eventRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("couldn't find specific event"));
     }
 }
