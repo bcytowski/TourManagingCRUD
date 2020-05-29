@@ -10,4 +10,8 @@ import java.util.List;
 @Repository
 public interface BandRepository extends JpaRepository<Band, Long> {
     List<Band> findByIdIn(Collection<Long> ids);
+
+    Band findBandByName(String name);
+
+
 }

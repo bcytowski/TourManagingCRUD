@@ -3,6 +3,7 @@ package pl.sda.javagda28.tourmanagingcrud;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.sda.javagda28.tourmanagingcrud.entity.Band;
@@ -17,7 +18,6 @@ import pl.sda.javagda28.tourmanagingcrud.repository.UserRepository;
 import pl.sda.javagda28.tourmanagingcrud.repository.VenueRepository;
 
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -35,19 +35,18 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(final String... args) throws Exception {
+        byte[] narodowyImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/stadionnarodowy.jpg"));
+        byte[] energaImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/stadionenerga.jpg"));
+        byte[] atlasImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/atlasarena.jpg"));
 
-        byte[] narodowyImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/stadionnarodowy.jpg"));
-        byte[] energaImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/stadionenerga.jpg"));
-        byte[] atlasImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/atlasarena.jpg"));
+        Venue stadionNarodowy = venueRepository.save(new Venue(null, "Stadion Narodowy", "Warszawka", "Stadion Narodowy w Warszawie, od lipca 2015 pod nazwą PGE Narodowy – wielofunkcyjny stadion sportowy znajdujący się przy al. Księcia Józefa Poniatowskiego 1 w Warszawie. Został wybudowany w latach 2008–2011 w miejscu Stadionu Dziesięciolecia przed piłkarskimi Mistrzostwami Europy 2012.", narodowyImage, null));
+        Venue stadionEnerga = venueRepository.save(new Venue(null, "Stadion Energa", "Gdańsk", "Stadion Energa Gdańsk – stadion piłkarski w Gdańsku, znajdujący się przy ulicy Pokoleń Lechii Gdańsk 1, w dzielnicy Letnica. Stanowi własność miasta Gdańska, a jego głównym użytkownikiem jest klub piłkarski Lechia Gdańsk.", energaImage, null));
+        Venue atlasArena = venueRepository.save(new Venue(null, "Atlas Arena", "Lódź", "Atlas Arena – hala sportowo-widowiskowa w Łodzi. Trybuny mogą pomieścić 10.049 widzów, a na płycie można ustawić dodatkowo 3 tys. miejsc; do dyspozycji gości dostępnych jest 1500 miejsc postojowych, 4 ekrany multimedialne, i 11 loży VIP-owskich.", atlasImage, null));
 
-        Venue stadionNarodowy = venueRepository.save(new Venue(null, "Stadion Narodowy", "Warszawka", "Stadion Narodowy w Warszawie, od lipca 2015 pod nazwą PGE Narodowy – wielofunkcyjny stadion sportowy znajdujący się przy al. Księcia Józefa Poniatowskiego 1 w Warszawie. Został wybudowany w latach 2008–2011 w miejscu Stadionu Dziesięciolecia przed piłkarskimi Mistrzostwami Europy 2012.", narodowyImage , null));
-        Venue stadionEnerga = venueRepository.save(new Venue(null, "Stadion Energa", "Gdańsk", "Stadion Energa Gdańsk – stadion piłkarski w Gdańsku, znajdujący się przy ulicy Pokoleń Lechii Gdańsk 1, w dzielnicy Letnica. Stanowi własność miasta Gdańska, a jego głównym użytkownikiem jest klub piłkarski Lechia Gdańsk.",energaImage , null));
-        Venue atlasArena = venueRepository.save(new Venue(null, "Atlas Arena", "Lódź", "Atlas Arena – hala sportowo-widowiskowa w Łodzi. Trybuny mogą pomieścić 10.049 widzów, a na płycie można ustawić dodatkowo 3 tys. miejsc; do dyspozycji gości dostępnych jest 1500 miejsc postojowych, 4 ekrany multimedialne, i 11 loży VIP-owskich.", atlasImage , null));
-
-        byte[] metallicaPhoto = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/metallica.jpg"));
-        byte[] anthraxPhoto = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/anthrax.jpg"));
-        byte[] slayerPhoto = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/slayer.jpg"));
-        byte[] megadethPhoto = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/megadeth.jpg"));
+        byte[] metallicaPhoto = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/metallica.jpg"));
+        byte[] anthraxPhoto = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/anthrax.jpg"));
+        byte[] slayerPhoto = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/slayer.jpg"));
+        byte[] megadethPhoto = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/megadeth.jpg"));
 
 
         Band metallica = bandRepository.save(new Band(null, "Metallica", "thrash metal", 4L, "Amerykański zespół heavymetalowy i thrashmetalowy założony w Los Angeles w 1981 roku przez Jamesa Hetfielda i Larsa Ulricha. Uważany za jeden z najważniejszych, najbardziej wpływowych zespołów metalowych lat 80. XX wieku, w latach 90. ubiegłego stulecia za najbardziej dochodowy zespół metalowy, a także za jeden z najpopularniejszych i najwybitniejszych zespołów heavymetalowych w dziejach. Według danych szacunkowych, nakład ze sprzedaży wszystkich wydawnictw muzycznych Metalliki na całym świecie wyniósł ponad 150–200 milionów egzemplarzy, zgodnie z oficjalnym raportem International Federation of the Phonographic Industry z 2006 roku – międzynarodowej i jedynej na świecie organizacji przemysłu muzycznego, która zlicza sprzedaż formatów wydawniczych z całego globu. Tym samym, Międzynarodowa Federacja Przemysłu Fonograficznego uznała zespół formacją heavymetalową z największą liczbą sprzedanych wydawnictw muzycznych w historii, zgodnie ze wszystkimi oficjalnymi certyfikatami sprzedaży. Są również dziewiątymi artystami (a trzynastymi w klasyfikacji generalnej obok Led Zeppelin i Julio Iglesiasa), którzy sprzedali najwięcej płyt w historii muzyki. W samych Stanach Zjednoczonych, według Recording Inustry Association of America, zrzeszenia wydawców fonografii przyznającego oficjalne certyfikaty za sprzedaż płyt i singli w USA nakład ze sprzedaży płyt zespołu przekroczył 99 milionów 500 tysięcy kopii. Od 1991 roku w Polsce sprzedaż albumów Metalliki sięgnęła liczby 866 tysięcy egzemplarzy według Związku Producentów Audio-Video, przyznającego oficjalne certyfikaty za sprzedaż wydawnictw muzycznych. Czyni ich to drugimi zagranicznymi artystami z największą liczbą sprzedanych płyt w Polsce. Zespół jest jedną z najbardziej dochodowych grup muzycznych ostatnich trzech dekad pod względem sprzedaży koncertów. Do 2014 roku Metallica zarobiła na trasach koncertowych 433 miliony dolarów. W 2019 roku serwis Pollstar sklasyfikował zespół jako najlepiej zarabiający artysta koncertujący.", "wsrvmNtWU4E", metallicaPhoto, null));
@@ -56,8 +55,8 @@ public class TestDataRunner implements CommandLineRunner {
         bandRepository.save(new Band(null, "Megadeth", "thrash metal", 4L, "Megadeth – amerykańska grupa muzyczna założona w kwietniu 1983 roku w Los Angeles w Kalifornii. Powstała z inicjatywy Dave’a Mustaine’a i Dave’a Ellefsona. Nazwa zespołu to fonetyczne brzmienie angielskiego (megadeath) określenia hipotetycznej jednostki miar, oznaczającej liczbę miliona osób, które zginęłyby w wyniku eksplozji nuklearnej[2]. Formacja reprezentuje takie style muzyczne jak thrash metal, speed metal, heavy metal i metal progresywny. Nakład ze sprzedaży wszystkich płyt grupy wynosi ponad 38 milionów egzemplarzy na całym świecie. Zespół zdobył sześć platynowych płyt i siedem nominacji do nagród Grammy. Należy do Wielkiej Czwórki Thrash Metalu, razem z zespołami Metallica, Slayer i Anthrax. Otrzymali nagrodę Grammy w kategorii Best Metal Performance w 2017 roku. Muzyka Megadeth charakteryzuje się dynamicznymi kompozycjami z bardzo szybko i agresywnie granymi riffami gitar. Łatwo rozpoznawalny jest również śpiew Dave’a Mustaine’a.", "K5jvUXij7nU", megadethPhoto, null));
 
 
-        byte[] sonisphereFestImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/sonisphere.jpg"));
-        byte[] mysticFestImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/mystic.jpg"));
+        byte[] sonisphereFestImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/sonisphere.jpg"));
+        byte[] mysticFestImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/mystic.jpg"));
 
         eventRepository.save(new Event(null, "Sonisphere Festival", LocalDateTime.now(), "Sonisphere Festival – festiwal rockowy złożony z serii koncertów odbywających się w różnych miastach europejskich. Pomysłodawcą festiwalu był Stuart Galbraith. Pierwsza edycja miała miejsce w 2009 roku, festiwal składał się z pięciu koncertów jednodniowych (w Nijmegen (Holandia), Hockenheimring (Niemcy), Barcelonie (Hiszpania), Hultsfred (Szwecja) i Pori (Finlandia)) oraz dwudniowego w Knebworth (Anglia). Na wszystkich sześciu koncertach wystąpiły zespoły Metallica, Mastodon oraz Lamb of God.", sonisphereFestImage, Arrays.asList(metallica), stadionNarodowy));
 
@@ -73,19 +72,19 @@ public class TestDataRunner implements CommandLineRunner {
         roleRepository.save(roleOrganiser);
 
 
-        byte[] adminImage = IOUtils.toByteArray(new FileInputStream("C:/Users/48510/Documents/KURS_SDA/TourManagingCRUD/src/main/resources/static/img/bart.jpg"));
+        byte[] adminImage = IOUtils.toByteArray(getClass().getResourceAsStream("/static/img/bart.jpg"));
 
         final User admin = new User(null, "admin", "admin@admins.com",
-                passwordEncoder.encode("admin"),adminImage ,List.of(),
+                passwordEncoder.encode("admin"), adminImage, List.of(),
                 List.of(roleAdmin));
         userRepository.save(admin);
 
         final User bandUser = new User(null, "band", "band@band.com",
-                passwordEncoder.encode("band"), null,List.of(), List.of(roleBand));
+                passwordEncoder.encode("band"), null, List.of(), List.of(roleBand));
         userRepository.save(bandUser);
 
         final User organiserUser = new User(null, "organiser", "organiser@organiser.com",
-                passwordEncoder.encode("organiser"),null, List.of(), List.of(roleOrganiser));
+                passwordEncoder.encode("organiser"), null, List.of(), List.of(roleOrganiser));
         userRepository.save(organiserUser);
     }
 }

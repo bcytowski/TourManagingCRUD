@@ -5,7 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.sda.javagda28.tourmanagingcrud.entity.Role;
 import pl.sda.javagda28.tourmanagingcrud.entity.User;
-import pl.sda.javagda28.tourmanagingcrud.exceptions.TourManagingException;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.AlreadyExistException;
+import pl.sda.javagda28.tourmanagingcrud.exceptions.RecordNotFoundException;
 import pl.sda.javagda28.tourmanagingcrud.dto.UserForm;
 import pl.sda.javagda28.tourmanagingcrud.repository.UserRepository;
 
@@ -29,7 +30,7 @@ public class UserService {
         final Long usersCountWithDuplicatedData
                 = userRepository.countAllByUsernameOrEmail(userForm.getUsername(), userForm.getEmail());
         if (usersCountWithDuplicatedData > 0) {
-            throw new TourManagingException("User with same username or email already exists");
+            throw new AlreadyExistException("User with same username or email already exists");
         }
         final User user = userMapper.userFormToUser(userForm);
         return userRepository.save(user);
@@ -68,7 +69,7 @@ public class UserService {
 
     public User findSpecificUserById(final Long id){
         final User user = userRepository.findById(id)
-                .orElseThrow(() -> new TourManagingException("Cannot update non existing user"));
+                .orElseThrow(() -> new RecordNotFoundException("Cannot update non existing user"));
         return user;
     }
 }

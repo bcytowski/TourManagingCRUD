@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import pl.sda.javagda28.tourmanagingcrud.service.AppUserDetailsService;
 
 @Configuration
@@ -17,8 +18,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AppUserDetailsService appUserDetailsService;
 
-    public SecurityConfig(final AppUserDetailsService appUserDetailsService) {
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    public SecurityConfig(final AppUserDetailsService appUserDetailsService, final AuthenticationSuccessHandler authenticationSuccessHandler) {
         this.appUserDetailsService = appUserDetailsService;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .successHandler(authenticationSuccessHandler)
                 .and().logout()
                 .logoutSuccessUrl("/")
                 .and()
